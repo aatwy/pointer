@@ -7,3 +7,8 @@ tr:nth-child(odd) {
 #playersTitle {
   text-align: center;
 }
+#playersTable {
+  display:inline-table;
+  flex: 1 1 100%;
+  flex-wrap: nowrap;
+}

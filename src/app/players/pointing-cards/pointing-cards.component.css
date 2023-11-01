@@ -1,6 +1,7 @@
 .pointCard {
-  margin: 0.15em;
-  font-size: xx-large;
+  margin: 0.1em;
+  font-size: x-large;
+  border:outset 1px grey;
 }
 
 .cardBox {
