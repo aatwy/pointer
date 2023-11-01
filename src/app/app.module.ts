@@ -9,6 +9,8 @@ import { HeaderComponent } from './header/header.component';
 import { SessionComponent } from './session/session.component';
 import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
+import { CounterComponent } from './counter/counter.component';
+import { PointingCardsComponent } from './players/pointing-cards/pointing-cards.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { StoryComponent } from './story/story.component';
     HeaderComponent,
     SessionComponent,
     HistoryComponent,
-    StoryComponent
+    StoryComponent,
+    CounterComponent,
+    PointingCardsComponent,
   ],
   imports: [
     BrowserModule,
