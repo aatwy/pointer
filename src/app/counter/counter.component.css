@@ -1,15 +1,7 @@
-.card-header {
-  background: lightblue;
-}
-
 #counterArea {
   min-height: 17em;
 }
-
 #averageScore {
   text-align: center;
 }
 
-.voteList {
-  margin-left: 1em;
-}

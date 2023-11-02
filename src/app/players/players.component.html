@@ -10,11 +10,19 @@
       </div>
     </div>
     <hr>
-    <table id="playersTable">
-      <tr><app-player class="player"></app-player></tr>
-      <tr><app-player class="player"></app-player></tr>
-      <tr><app-player class="player"></app-player></tr>
-      <tr><app-player class="player"></app-player></tr>
+    <table id="playersTable" class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Player</th>
+          <th scope="col">Vote</th>
+          <th scope="col">Voted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr app-player></tr>
+        <tr app-player></tr>
+        <tr app-player></tr>
+      </tbody>
     </table>
   </div>
 </div>
