@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h3 id="playersTitle">Story Name </h3>
+    <h3 id="playersTitle">Poker Players</h3>
     <hr>
     <div class="container-fluid">
       <div class="row">
@@ -19,9 +19,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr app-player></tr>
-        <tr app-player></tr>
-        <tr app-player></tr>
+        <tr app-player
+          *ngFor="let player of players"
+          [player]="player"></tr>
       </tbody>
     </table>
   </div>
