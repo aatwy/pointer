@@ -1,14 +1,5 @@
 <div class="row">
-  <div>
-    <h3 id="playersTitle">Poker Players</h3>
-    <hr>
-    <div class="container-fluid">
-      <div class="row">
-        <div>
-          <app-pointing-cards></app-pointing-cards>
-        </div>
-      </div>
-    </div>
+  <app-player></app-player>
     <hr>
     <table id="playersTable" class="table table-striped">
       <thead>
@@ -19,10 +10,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr app-player
-          *ngFor="let player of players"
-          [player]="player"></tr>
+        <tr *ngFor="let player of players">
+          <td>{{player.name}}</td>
+          <td>{{player.vote}}</td>
+          <td>{{player.voted}}</td>
+        </tr>
       </tbody>
     </table>
-  </div>
 </div>

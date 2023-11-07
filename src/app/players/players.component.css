@@ -4,6 +4,3 @@ tr:nth-child(odd) {
 #playersTable {
   min-width: 100%;
 }
-#playersTitle {
-  text-align: center;
-}

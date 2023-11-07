@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class PointingCardsComponent {
 
+  onVote(event: Event) {
+    let value = < HTMLInputElement > event.target
+    console.log(value.id)
+  }
 }

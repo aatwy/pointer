@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Player } from './player/player.model';
+import { VotingService } from '../shared/voting.service';
 
 @Component({
   selector: 'app-players',
@@ -7,27 +8,14 @@ import { Player } from './player/player.model';
   styleUrls: ['./players.component.css']
 })
 
-export class PlayersComponent {
-  players: Player[] = [
-    {
-    id: '1',
-    name: 'Ali',
-    vote: '5',
-    voted: true
-    },
-    {
-    id: '2',
-    name: 'Mike',
-    vote: '2',
-    voted: true
-    },
-    {
-    id: '3',
-    name: 'Albert',
-    vote: '1',
-    voted: true
-    },
+export class PlayersComponent implements OnInit {
+  players: Player[];
 
-  ];
+  constructor(private votingService: VotingService){}
+
+  ngOnInit(): void {
+    this.players = this.votingService.getPlayers();
+  }
+
 
 }

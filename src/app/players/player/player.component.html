@@ -1,3 +1,16 @@
-  <td>{{ player.name }}</td>
-  <td>{{ player.vote }}</td>
-  <td>{{ player.voted }}</td>
+<div class="row">
+  <h3 id="playersTitle">{{ currentPlayer }} : {{ currentVote !== 0 ? currentVote : "🧋" }}</h3>
+  <hr>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-10 cardBox">
+      <button
+        *ngFor="let vote of voteControl"
+        id={{vote}}
+        (click)="onVote($event)"
+        [ngClass]="{active : isClicked(vote)}"
+        class="btn btn-light pointCard">
+        {{ vote !== 0 ?  vote : "🧋" }}
+      </button>
+  </div>
+</div>
