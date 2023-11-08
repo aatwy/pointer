@@ -1,6 +1,6 @@
 <div class="row">
   <app-player></app-player>
-    <hr>
+
     <table id="playersTable" class="table table-striped">
       <thead>
         <tr>
@@ -11,9 +11,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let player of players">
-          <td>{{player.name}}</td>
-          <td>{{player.vote}}</td>
-          <td>{{player.voted}}</td>
+          <td>{{ player.name }}</td>
+          <td>{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
+          <td>{{ player.vote ? "✔️" : ""}}</td>
         </tr>
       </tbody>
     </table>

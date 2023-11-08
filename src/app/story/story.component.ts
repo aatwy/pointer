@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VotingService } from '../shared/voting.service';
 
 @Component({
   selector: 'app-story',
@@ -7,9 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StoryComponent implements OnInit {
   story: string;
+  showVotes: boolean = false;
+
+  constructor( private votingService: VotingService ){
+
+  }
+
 
   ngOnInit(): void {
-    this.story = "magic"
+    this.story = "MM-XXX"
+  }
+
+  toggleVote(){
+    this.showVotes = !this.showVotes
+    this.votingService.toggleVotes();
+  }
+
+  clearStory(){
+    this.votingService.clearVotes()
+    this.showVotes = false;
+    this.story = ""
   }
 
 }

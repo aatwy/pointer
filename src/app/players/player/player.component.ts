@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Player } from './player.model';
+import { PlayerService } from 'src/app/shared/player.service';
 
 @Component({
   selector: 'app-player',
@@ -8,13 +9,15 @@ import { Player } from './player.model';
 })
 export class PlayerComponent implements OnInit{
   voteControl: number[] = [.5,1,2,3,5,8,13,20,40,100,0]
-  currentVote: number = 0;
-  currentPlayer: string = "Ali";
+  currentVote: number;
 
-  constructor(){
+  @Input() currentPlayer:Player;
+
+  constructor(private playerService: PlayerService){
   }
 
   ngOnInit(): void {
+
   }
 
   isClicked(vote: number){

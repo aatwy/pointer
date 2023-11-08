@@ -1,30 +1,46 @@
 import { Injectable } from "@angular/core";
 
-import { Player } from "../players/player/player.model";
+import { Subject } from "rxjs";
+import { PlayerService } from "./player.service";
 
 @Injectable({providedIn: 'root'})
 export class VotingService {
-  private players: Player[] = [
-    {
-      id: '1',
-      name: 'Ali',
-      vote: '5',
-      voted: true
-    },
-    {
-      id: '2',
-      name: 'Mike',
-      vote: '2',
-      voted: true
-    },
-    {
-      id: '3',
-      name: 'Albert',
-      vote: '1',
-      voted: true
-    }]
+  showVotes: boolean = false;
+  votes: number[] = [];
 
-  getPlayers(){
-    return this.players.slice();
+  votesChanged = new Subject<number[]>();
+  toggler = new Subject<boolean>();
+
+  constructor(private playerService: PlayerService){}
+
+  toggleVotes(){
+    this.showVotes = !this.showVotes
+    this.toggler.next(this.showVotes)
   }
+
+  clearVotes(){
+    this.playerService.clearPlayerVotes();
+    this.showVotes = false;
+    this.toggler.next(this.showVotes)
+    this.votes = [];
+    this.updateVotes();
+  }
+
+  updateVotes(){
+    this.votesChanged.next(this.votes)
+    console.log(this.votes)
+  }
+
+  setVotes(){
+    let players = this.playerService.players;
+
+    for (let player of players) {
+      if (+player.vote != 0) {
+        this.votes.push(+player.vote)
+      }
+    }
+    console.log(this.votes)
+    this.updateVotes();
+  }
+
 }

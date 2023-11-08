@@ -11,7 +11,6 @@ import { SessionComponent } from './session/session.component';
 import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
 import { CounterComponent } from './counter/counter.component';
-import { PointingCardsComponent } from './players/pointing-cards/pointing-cards.component';
 
 @NgModule({
   declarations: [
@@ -22,8 +21,7 @@ import { PointingCardsComponent } from './players/pointing-cards/pointing-cards.
     SessionComponent,
     HistoryComponent,
     StoryComponent,
-    CounterComponent,
-    PointingCardsComponent,
+    CounterComponent
   ],
   imports: [
     BrowserModule,
