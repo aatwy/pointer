@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,10 @@ import { SessionComponent } from './session/session.component';
 import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
 import { CounterComponent } from './counter/counter.component';
+import { HomeComponent } from './home/home.component';
+import { SessionModalComponent } from './session/session-modal/session-modal.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 
 @NgModule({
   declarations: [
@@ -21,12 +26,16 @@ import { CounterComponent } from './counter/counter.component';
     SessionComponent,
     HistoryComponent,
     StoryComponent,
-    CounterComponent
+    CounterComponent,
+    HomeComponent,
+    SessionModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    MdbModalModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

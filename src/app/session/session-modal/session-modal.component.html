@@ -1,0 +1,45 @@
+<div class="modal-header" data-bs-theme="dark">
+  <h5 class="modal-title" id="modalTitle">Session Control</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="modalRef.close()">
+  </button>
+</div>
+<div class="modal-body">
+  <div class="flex-row">
+    <input
+    id="nameInput"
+    type="text"
+    class="form-control mt-2"
+    placeholder="Enter your name.."
+    [(ngModel)]="userName">
+    <div class="mt-2 form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="spectateCheck"
+        [checked]="spectate"
+        (change)="spectate = !spectate"
+        >
+      <label class="form-check-label" for="spectateCheck">Spectate</label>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="modalRef.close()">
+    Close
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    (click)="onCreate()"
+    [disabled]="!userName">
+    Create
+  </button>
+</div>

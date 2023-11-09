@@ -3,5 +3,11 @@
 // Trustwell Colors
 $primary: #003f70;
 
+// Bootstrap
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 @import "~bootstrap-icons/font/bootstrap-icons.css";
+
+
+body {
+  font-family: roboto;
+}

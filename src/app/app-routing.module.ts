@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PlayersComponent } from './players/players.component';
 import { SessionComponent } from './session/session.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: '', component: SessionComponent }
+  { path: '', component: HomeComponent },
+  { path: 'session', component: SessionComponent}
 ];
 
 @NgModule({
