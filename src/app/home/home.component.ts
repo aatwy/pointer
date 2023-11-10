@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { SessionModalComponent } from '../session/session-modal/session-modal.component';
+import { Component, ViewChild } from '@angular/core';
+import { SessionModalComponent } from './session-modal/session-modal.component';
+import { ModalDismissReasons, NgbDatepickerModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalConfig } from '../shared/modal.config.interface';
 
 @Component({
   selector: 'app-home',
@@ -8,19 +9,15 @@ import { SessionModalComponent } from '../session/session-modal/session-modal.co
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  modalRef: MdbModalRef<SessionModalComponent> | null = null;
-  config = {
-    animation: true,
-    backdrop: true,
-    data: {
-      title: 'Session Creator'
-    },
-    ignoreBackdropClick: true
+  @ViewChild('modal') private modalComponent: SessionModalComponent
+
+  modalConfig: ModalConfig = {
+    modalTitle: 'Session Creator'
   }
 
-  constructor(private modalService: MdbModalService) { }
+  constructor(private modalService: NgbModal) { }
 
-  openModal() {
-    this.modalRef = this.modalService.open(SessionModalComponent, this.config)
+    async openModal() {
+      return await this.modalComponent.open()
+    }
   }
-}

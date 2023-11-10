@@ -13,8 +13,8 @@ import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
 import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
-import { SessionModalComponent } from './session/session-modal/session-modal.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { SessionModalComponent } from './home/session-modal/session-modal.component';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -34,8 +34,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    MdbModalModule,
-    FontAwesomeModule
+    NgbModule,
+    NgbDatepickerModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,48 @@
+import { Component, Injectable, Input, TemplateRef, ViewChild } from '@angular/core';
+import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalConfig } from 'src/app/shared/modal.config.interface';
+import { SessionService } from 'src/app/shared/session.service';
+
+@Component({
+  selector: 'app-session-modal',
+  templateUrl: './session-modal.component.html',
+  styleUrls: ['./session-modal.component.css']
+})
+@Injectable()
+export class SessionModalComponent {
+  @Input() public modalConfig: ModalConfig;
+  @ViewChild('modal') private modalContent: TemplateRef<SessionModalComponent>;
+  private modalRef: NgbModalRef;
+
+  userName: string;
+  spectate: boolean = false;
+
+  constructor(
+    private sessionService: SessionService,
+    private ngmodal: NgbModal) { }
+
+  onCreate(){
+    this.sessionService.createSession();
+  }
+
+  open(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.modalRef = this.ngmodal.open(this.modalContent)
+      this.modalRef.result.then(resolve, resolve)
+    })
+  }
+
+  async close(): Promise<void> {
+    if (this.modalConfig.shouldClose === undefined || (await this.modalConfig.shouldClose())) {
+      const result = this.modalConfig.onClose === undefined || (await this.modalConfig.onClose())
+      this.modalRef.close(result)
+    }
+  }
+
+  async dismiss(): Promise<void> {
+    if (this.modalConfig.shouldDismiss === undefined || (await this.modalConfig.shouldDismiss())) {
+      const result = this.modalConfig.onDismiss === undefined || (await this.modalConfig.onDismiss())
+      this.modalRef.dismiss(result)
+    }
+  }
+}

@@ -5,3 +5,7 @@
 .modal-title {
   color: white;
 }
+
+.modal-footer {
+  justify-content: center;
+}
