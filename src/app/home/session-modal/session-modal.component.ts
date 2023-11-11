@@ -1,5 +1,6 @@
 import { Component, Injectable, Input, TemplateRef, ViewChild } from '@angular/core';
-import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from 'src/app/shared/modal.config.interface';
 import { SessionService } from 'src/app/shared/session.service';
 
@@ -16,15 +17,20 @@ export class SessionModalComponent {
 
   userName: string;
   spectate: boolean = false;
+  createClicked: boolean = false;
 
   constructor(
     private sessionService: SessionService,
-    private ngmodal: NgbModal) { }
+    private ngmodal: NgbModal,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   onCreate(){
-    this.sessionService.createSession();
+    this.sessionService.createSession(this.userName);
+    this.createClicked = true;
+    this.close();
+    this.router.navigate([`/session/${this.sessionService.sessionId}`], {relativeTo: this.route})
   }
-
   open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.modalRef = this.ngmodal.open(this.modalContent)

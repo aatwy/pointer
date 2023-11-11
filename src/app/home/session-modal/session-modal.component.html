@@ -18,7 +18,7 @@
   </div>
   <div class="modal-footer">
     <button id="createButton" type="button" class="btn btn-outline-primary" (click)="onCreate()"
-      [disabled]="!userName">
+      [disabled]="!userName || createClicked">
       Create Session
     </button>
   </div>
