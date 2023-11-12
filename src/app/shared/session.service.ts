@@ -14,15 +14,12 @@ export class SessionService {
   sessionSet = new Subject<string>();
   player: Player;
   joiningSession: boolean = false;
-  private _sessionId: string = 'abefg';
+  sessionId: string = 'abefg';
 
   constructor(
     private cookieService: CookieService,
     private playerService: PlayerService){}
 
-  get sessionId() {
-    return this._sessionId
-  }
 
   checkCookie() {
     if (this.cookieService.check('pointingSession')) {
@@ -43,7 +40,7 @@ export class SessionService {
   private createSessionCookie() {
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 1);
-    let stringCookie = JSON.stringify({ 'sessionId': this._sessionId, 'playerId': this.player.id})
+    let stringCookie = JSON.stringify({ 'sessionId': this.sessionId, 'playerId': this.player.id})
     this.cookieService.set('pointingSession', stringCookie, expirationDate)
     let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'))
     this.sessionSet.next(cookie.sessionId)
@@ -59,10 +56,10 @@ export class SessionService {
         vote: '',
         online: true
       })
-    this._sessionId = uuid();
+    this.sessionId = uuid();
     this.createSessionCookie();
     console.log("players array: " + this.playerService.players)
-    console.log("session ID: " + this._sessionId)
+    console.log("session ID: " + this.sessionId)
   }
 
   joinSession(playerName: string){

@@ -37,7 +37,6 @@ export class CounterComponent implements OnInit, OnDestroy{
     this.votes = this.voteService.votes;
     console.log(`votes in ngInit of counter components ${this.votes}`)
     this.countVotes();
-
   }
 
   ngOnDestroy(): void {

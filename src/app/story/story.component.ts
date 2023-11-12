@@ -20,7 +20,9 @@ export class StoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.story = "Platform-5212"
-     this.admin = this.playerService.currentPlayer.id === 1
+    if (this.playerService.currentPlayer) {
+      this.admin = this.playerService.currentPlayer.id === 1
+    }
   }
 
   toggleVote(){

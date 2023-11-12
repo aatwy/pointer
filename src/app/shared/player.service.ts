@@ -7,37 +7,7 @@ import { Subject } from "rxjs";
 export class PlayerService {
   currentPlayer: Player;
 
-  private _players: Player[] = [
-    {
-      name: 'Ali',
-      id: 1,
-      vote: '2',
-      online: true
-    },
-    {
-      name: 'Ali1',
-      id: 2,
-      vote: '2',
-      online: true
-    },
-    {
-      name: 'Ali2',
-      id: 3,
-      vote: '2',
-      online: true
-    },
-    {
-      name: 'Ali3',
-      id: 4,
-      vote: '3',
-      online: true
-    }, {
-      name: 'Ali4',
-      id: 78,
-      vote: '1',
-      online: true
-    }
-  ]
+  private _players: Player[] = []
 
   constructor(){}
 
@@ -49,10 +19,11 @@ export class PlayerService {
   }
 
   setPlayer(id: number){
-    // set current player to one matched in players array
-    this.currentPlayer = this._players.find(p => p.id === id)
     // Update player in array to online again
     this._players[this._players.findIndex(p => p.id === id)].online = true;
+    // set current player to one matched in players array
+    this.currentPlayer = this._players.find(p => p.id === id)
+
   }
 
   addPlayer(player: Player){
