@@ -9,9 +9,12 @@ export class VotingService {
   votes: number[] = [];
 
   votesChanged = new Subject<number[]>();
+  votesCleared = new Subject<boolean>();
   toggler = new Subject<boolean>();
 
-  constructor(private playerService: PlayerService){}
+  constructor(
+    private playerService: PlayerService){
+    }
 
   toggleVotes(){
     this.showVotes = !this.showVotes
@@ -23,15 +26,16 @@ export class VotingService {
     this.showVotes = false;
     this.toggler.next(this.showVotes)
     this.votes = [];
-    this.updateVotes();
+    this.votesCleared.next(true);
   }
 
   updateVotes(){
     this.votesChanged.next(this.votes)
-    console.log(this.votes)
+    console.log("Updating Votes, new vote array:" + this.votes)
   }
 
   setVotes(){
+    this.votes = []
     let players = this.playerService.players;
 
     for (let player of players) {
@@ -39,7 +43,7 @@ export class VotingService {
         this.votes.push(+player.vote)
       }
     }
-    console.log(this.votes)
+    console.log("setting votes: " + this.votes)
     this.updateVotes();
   }
 

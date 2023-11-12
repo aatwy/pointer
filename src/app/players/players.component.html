@@ -1,6 +1,6 @@
 <div class="row">
   <app-player></app-player>
-
+    <div class="container-fluid">
     <table id="playersTable" class="table table-striped">
       <thead>
         <tr>
@@ -12,9 +12,11 @@
       <tbody>
         <tr *ngFor="let player of players">
           <td>{{ player.name }}</td>
-          <td>{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
+          <td *ngIf="player.vote === '0'">{{ showVotes ? '' : "〰️〰️〰️"}}</td>
+          <td *ngIf="player.vote != '0'">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
           <td>{{ player.vote ? "✔️" : ""}}</td>
         </tr>
       </tbody>
     </table>
+    </div>
 </div>

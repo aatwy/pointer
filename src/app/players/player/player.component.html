@@ -2,11 +2,11 @@
 
   <div class="container-fluid">
     <h3
-      id="playersTitle">{{ "currentPlayer.name "}} : {{ currentVote !== 0 ? currentVote : "🧋" }}
+      id="playersTitle">{{ currentPlayer.name}}, Point: {{ currentVote !== 0 ? currentVote : "🧋" }}
     </h3>
     <hr>
     <div class="row">
-      <div class="col-10 cardBox">
+      <div class="col-10 cardBox mt-1">
         <button
           *ngFor="let vote of voteControl"
           id={{vote}}

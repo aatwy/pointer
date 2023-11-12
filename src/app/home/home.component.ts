@@ -1,23 +1,41 @@
-import { Component, ViewChild } from '@angular/core';
-import { SessionModalComponent } from './session-modal/session-modal.component';
-import { ModalDismissReasons, NgbDatepickerModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { SessionModalComponent } from '../shared/session-modal/session-modal.component';
 import { ModalConfig } from '../shared/modal.config.interface';
+import { SessionService } from '../shared/session.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, AfterViewInit{
   @ViewChild('modal') private modalComponent: SessionModalComponent
 
   modalConfig: ModalConfig = {
-    modalTitle: 'Session Creator'
+    modalTitle: 'Session Creator',
+    closeButtonLabel: 'Create Session'
   }
 
-  constructor(private modalService: NgbModal) { }
+  constructor(
+    private sessionService: SessionService) {
+  }
 
-    async openModal() {
-      return await this.modalComponent.open()
+  ngOnInit(): void {
+    if(this.sessionService.joiningSession){
+      this.modalConfig.modalTitle = 'Join Pointing Session';
+      this.modalConfig.closeButtonLabel = 'Join Session';
+      this.modalConfig.shouldDismiss = () => false;
+      this.modalConfig.hideDismissButton  = () => true;
     }
   }
+
+  ngAfterViewInit(): void {
+    if (this.sessionService.joiningSession) {
+      this.openModal()
+    }
+  }
+
+  async openModal() {
+    return await this.modalComponent.open()
+  }
+}

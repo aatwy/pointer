@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
+import { Clipboard, ClipboardModule } from '@angular/cdk/clipboard'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,7 +13,7 @@ import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
 import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
-import { SessionModalComponent } from './home/session-modal/session-modal.component';
+import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -28,7 +28,7 @@ import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
     StoryComponent,
     CounterComponent,
     HomeComponent,
-    SessionModalComponent
+    SessionModalComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,8 +36,9 @@ import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbModule,
     NgbDatepickerModule,
-
+    ClipboardModule
   ],
+
   providers: [],
   bootstrap: [AppComponent]
 })

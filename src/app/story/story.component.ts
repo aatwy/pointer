@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VotingService } from '../shared/voting.service';
+import { SessionService } from '../shared/session.service';
+import { PlayerService } from '../shared/player.service';
 
 @Component({
   selector: 'app-story',
@@ -9,14 +11,16 @@ import { VotingService } from '../shared/voting.service';
 export class StoryComponent implements OnInit {
   story: string;
   showVotes: boolean = false;
+  admin: boolean = false;
 
-  constructor( private votingService: VotingService ){
-
+  constructor(
+    private votingService: VotingService,
+    private playerService: PlayerService){
   }
 
-
   ngOnInit(): void {
-    this.story = "MM-XXX"
+    this.story = "Platform-5212"
+     this.admin = this.playerService.currentPlayer.id === 1
   }
 
   toggleVote(){

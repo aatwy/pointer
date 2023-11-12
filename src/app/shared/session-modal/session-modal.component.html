@@ -1,8 +1,13 @@
 <ng-template #modal>
   <div class="modal-header" data-bs-theme="dark">
     <h5 class="modal-title" id="modalTitle">{{ modalConfig.modalTitle }}</h5>
-    <button type="button" class="btn-close" aria-label="Close"
-      (click)="dismiss()">
+    <button
+      (click)="dismiss()"
+      *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
+      [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()"
+      type="button"
+      class="btn-close"
+      aria-label="Close">
     </button>
   </div>
   <div class="modal-body">
@@ -17,9 +22,13 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button id="createButton" type="button" class="btn btn-outline-primary" (click)="onCreate()"
+    <button
+      id="createButton"
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="onClick()"
       [disabled]="!userName || createClicked">
-      Create Session
+      {{ modalConfig.closeButtonLabel }}
     </button>
   </div>
 </ng-template>

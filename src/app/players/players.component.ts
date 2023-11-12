@@ -20,10 +20,14 @@ export class PlayersComponent implements OnInit, OnDestroy {
     private playerService: PlayerService){}
 
   ngOnInit(): void {
+    // Subscribe to listen for any changes on toggling the player votes
     this.voteControlSub = this.votingService.toggler.subscribe((showVotes) => {
       this.showVotes = showVotes
     })
+    // update component players list with current list from service
     this.players = this.playerService.players;
+    // initialize votes in the voting service for first load
+    this.votingService.setVotes()
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VotingService } from '../shared/voting.service';
 import { Subscription } from 'rxjs';
+import { SessionService } from '../shared/session.service';
 
 
 export interface VoteCount {
@@ -15,11 +16,12 @@ export interface VoteCount {
 
 export class CounterComponent implements OnInit, OnDestroy{
   voterSub: Subscription;
+  voteTogglerSub: Subscription;
 
   votes: number[] = [];
   voteCount: VoteCount[] = [];
   average: number;
-  showVotes: boolean;
+  showVotes: boolean = false;
 
   constructor(private voteService: VotingService){}
 
@@ -27,20 +29,20 @@ export class CounterComponent implements OnInit, OnDestroy{
     this.voterSub = this.voteService.votesChanged.subscribe((votes) => {
       this.votes = votes;
       this.countVotes();
-      this.average = Math.round((this.averageVotes()) * 100) / 100
     } )
 
-    this.voteService.toggler.subscribe((show) => {
+    this.voteTogglerSub = this.voteService.toggler.subscribe((show) => {
       this.showVotes = show;
     })
-
+    this.votes = this.voteService.votes;
+    console.log(`votes in ngInit of counter components ${this.votes}`)
     this.countVotes();
-    this.average = Math.round((this.averageVotes()) * 100 )/ 100
 
   }
 
   ngOnDestroy(): void {
     this.voterSub.unsubscribe();
+    this.voteTogglerSub.unsubscribe();
   }
 
   averageVotes(){
@@ -67,7 +69,8 @@ export class CounterComponent implements OnInit, OnDestroy{
       }
     }
     this.voteCount = this.voteCount.sort((a,b) => b.count - a.count )
-    console.log(this.voteCount)
+    this.average = Math.round((this.averageVotes()) * 100) / 100
+    console.log("current votecount: " + this.voteCount)
   }
 
 

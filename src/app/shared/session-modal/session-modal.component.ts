@@ -1,6 +1,6 @@
-import { Component, Injectable, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Injectable, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from 'src/app/shared/modal.config.interface';
 import { SessionService } from 'src/app/shared/session.service';
 
@@ -10,7 +10,7 @@ import { SessionService } from 'src/app/shared/session.service';
   styleUrls: ['./session-modal.component.css']
 })
 @Injectable()
-export class SessionModalComponent {
+export class SessionModalComponent implements OnInit{
   @Input() public modalConfig: ModalConfig;
   @ViewChild('modal') private modalContent: TemplateRef<SessionModalComponent>;
   private modalRef: NgbModalRef;
@@ -23,14 +23,33 @@ export class SessionModalComponent {
     private sessionService: SessionService,
     private ngmodal: NgbModal,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private config: NgbModalConfig) {
 
-  onCreate(){
-    this.sessionService.createSession(this.userName);
+      if(sessionService.joiningSession) {
+        config.backdrop = 'static';
+        config.keyboard = false;
+      }
+    }
+
+  ngOnInit(): void {
+  }
+
+  onClick(){
+    if(this.sessionService.joiningSession) {
+      console.log('joining session')
+      this.sessionService.joinSession(this.userName)
+    } else {
+      console.log('creating session')
+      this.sessionService.createSession(this.userName);
+    }
+
     this.createClicked = true;
     this.close();
-    this.router.navigate([`/session/${this.sessionService.sessionId}`], {relativeTo: this.route})
+    this.router.navigate([`/session/`, this.sessionService.sessionId], {relativeTo: this.route})
+    this.createClicked = false;
   }
+
   open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.modalRef = this.ngmodal.open(this.modalContent)

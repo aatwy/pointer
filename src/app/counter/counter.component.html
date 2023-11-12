@@ -1,5 +1,5 @@
-<div id="counterArea" class="container-fluid">
-  <h3 id="averageScore">Average: {{ average }}</h3>
+<div id="counterArea">
+  <h3 id="averageScore">Average: {{ showVotes ? average : '〰️〰️' }}</h3>
   <hr>
 <table class="table table-striped">
   <thead>
@@ -10,8 +10,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let vote of voteCount">
-      <td><strong>{{ vote.point }}</strong></td>
-      <td>{{ vote.count }}</td>
+      <td><strong>{{ showVotes ? vote.point : '〰️〰️' }}</strong></td>
+      <td>{{ showVotes ? vote.count : '〰️〰️' }}</td>
     </tr>
   </tbody>
 </table>
