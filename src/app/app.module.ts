@@ -15,7 +15,9 @@ import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
 import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
+const config: SocketIoConfig = { url: 'https://pointingpoker-5qeb.onrender.com', options: {}};
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbModule,
     NgbDatepickerModule,
-    ClipboardModule
+    ClipboardModule,
+    SocketIoModule.forRoot(config)
   ],
 
   providers: [],

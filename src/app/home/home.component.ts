@@ -38,4 +38,7 @@ export class HomeComponent implements OnInit, AfterViewInit{
   async openModal() {
     return await this.modalComponent.open()
   }
+
+  async getSession(){
+  }
 }

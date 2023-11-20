@@ -19,9 +19,9 @@ export class StoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.story = "Platform-5212"
+    this.story = "Story time"
     if (this.playerService.currentPlayer) {
-      this.admin = this.playerService.currentPlayer.id === 1
+      this.admin = this.playerService.currentPlayer.isAdmin;
     }
   }
 
