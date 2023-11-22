@@ -39,7 +39,7 @@ export class SessionModalComponent implements OnInit{
     if(this.sessionService.joiningSession) {
       console.log('joining session')
       // Need to add a check if the session is valid or not, if not then  show error rather than navigate onwards
-      this.sessionService.joinSession(this.userName)
+      await this.sessionService.joinSession(this.userName)
     } else {
       console.log('creating session')
       await this.sessionService.createSession(this.userName);

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <h3 id="storyTitle">{{ story }}</h3>
+    <h3 id="storyTitle">{{ story ? story : '📔' }}</h3>
     <hr>
     <div class="mt-4"></div>
     <div class="row" *ngIf="admin">
@@ -9,7 +9,8 @@
           type="text"
           class="input-group mb-3"
           placeholder="enter story..."
-          [(ngModel)]="story">
+          [(ngModel)]="story"
+          (change)="onStoryUpdated()">
         <button
           id="voteToggle"
           (click)="toggleVote()"
@@ -18,7 +19,7 @@
         </button>
         <button
           id="clear"
-          (click)="clearStory()"
+          (click)="onNextStory()"
           class="input-group mb-3 btn btn-outline-primary">
           Next Story
         </button>

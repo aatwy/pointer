@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Player } from './player/player.model';
 import { VotingService } from '../shared/voting.service';
 import { Subscription } from 'rxjs';
-import { PlayerService } from '../shared/player.service';
+import { SessionService } from '../shared/session.service';
 
 @Component({
   selector: 'app-players',
@@ -17,17 +17,25 @@ export class PlayersComponent implements OnInit, OnDestroy {
 
   constructor(
     private votingService: VotingService,
-    private playerService: PlayerService){}
+    private sessionService: SessionService){}
 
   ngOnInit(): void {
+    // Subscribe to changes in the session
+    this.sessionService.sessionUpdated.subscribe((session) => {
+      this.players = session.players;
+    })
+    if(this.sessionService.session){
+      this.players = this.sessionService.session.players;
+    }
+    // Subscribe to listen for vote updates
+    this.sessionService.voteUdpated.subscribe((updatedPlayers) => {
+      this.players = updatedPlayers;
+    })
     // Subscribe to listen for any changes on toggling the player votes
     this.voteControlSub = this.votingService.toggler.subscribe((showVotes) => {
+      console.log('asdfasfafs')
       this.showVotes = showVotes
     })
-    // update component players list with current list from service
-    this.players = this.playerService.players;
-    // initialize votes in the voting service for first load
-    this.votingService.setVotes()
   }
 
   ngOnDestroy(): void {

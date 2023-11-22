@@ -17,15 +17,20 @@ export interface VoteCount {
 export class CounterComponent implements OnInit, OnDestroy{
   voterSub: Subscription;
   voteTogglerSub: Subscription;
+  sessionSub: Subscription;
 
   votes: number[] = [];
   voteCount: VoteCount[] = [];
   average: number;
   showVotes: boolean = false;
 
-  constructor(private voteService: VotingService){}
+  constructor(private voteService: VotingService,
+    private sessionService: SessionService){}
 
   ngOnInit(): void {
+    this.sessionSub = this.sessionService.sessionUpdated.subscribe((session) => {
+
+    })
     this.voterSub = this.voteService.votesChanged.subscribe((votes) => {
       this.votes = votes;
       this.countVotes();
@@ -42,6 +47,7 @@ export class CounterComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.voterSub.unsubscribe();
     this.voteTogglerSub.unsubscribe();
+    this.sessionSub.unsubscribe();
   }
 
   averageVotes(){

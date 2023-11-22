@@ -3,6 +3,7 @@ import { Player } from './player.model';
 import { PlayerService } from 'src/app/shared/player.service';
 import { Subscription } from 'rxjs';
 import { VotingService } from 'src/app/shared/voting.service';
+import { SessionService } from 'src/app/shared/session.service';
 
 @Component({
   selector: 'app-player',
@@ -16,18 +17,22 @@ export class PlayerComponent implements OnInit{
   clearVote: Subscription;
 
   constructor(
-    private playerService: PlayerService,
-    private votingService: VotingService){
+    private votingService: VotingService,
+    private sessionService: SessionService){
   }
 
   ngOnInit(): void {
-    this.currentPlayer = this.playerService.currentPlayer
+    this.sessionService.playerSet.subscribe((updatedPlayer)=>{
+      this.currentPlayer = updatedPlayer
+    })
+    this.currentPlayer = this.sessionService.player;
     console.log("Current player in player component:")
     console.log(this.currentPlayer)
 
     this.clearVote = this.votingService.votesCleared.subscribe(() => {
       this.currentVote = null;
     })
+    this.currentVote = null
   }
 
   isClicked(vote: number){
@@ -37,10 +42,9 @@ export class PlayerComponent implements OnInit{
     return false;
   }
 
-  onVote(event: Event) {
+  async onVote(event: Event) {
     let value = <HTMLInputElement>event.target
     this.currentVote = +value.id;
-    this.playerService.updateVote(value.id);
-    this.votingService.setVotes()
+    await this.votingService.vote(this.currentPlayer._id, +value.id);
   }
 }

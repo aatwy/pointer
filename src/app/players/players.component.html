@@ -12,9 +12,9 @@
       <tbody>
         <tr *ngFor="let player of players">
           <td>{{ player.name }}</td>
-          <td *ngIf="player.vote === '0'">{{ showVotes ? '' : "〰️〰️〰️"}}</td>
-          <td *ngIf="player.vote != '0'">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
-          <td>{{ player.vote ? "✔️" : ""}}</td>
+          <td *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
+          <td *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
+          <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
         </tr>
       </tbody>
     </table>

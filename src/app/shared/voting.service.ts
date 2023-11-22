@@ -2,6 +2,10 @@ import { Injectable } from "@angular/core";
 
 import { Subject } from "rxjs";
 import { PlayerService } from "./player.service";
+import { SessionService } from "./session.service";
+import { Player } from "../players/player/player.model";
+import { DataService } from "./data.service";
+import { Session } from "../session/session.model";
 
 @Injectable({providedIn: 'root'})
 export class VotingService {
@@ -13,18 +17,35 @@ export class VotingService {
   toggler = new Subject<boolean>();
 
   constructor(
-    private playerService: PlayerService){
+    private playerService: PlayerService,
+    private sessionService: SessionService,
+    private dataService: DataService){
+
+      this.sessionService.voteUdpated.subscribe((updatedPlayers) => {
+          this.setVotes(updatedPlayers);
+      })
+
+      this.dataService.toggleShow.subscribe((toggle) => {
+        console.log('toggle triggered')
+        this.showVotes = toggle;
+        this.toggler.next(toggle)
+      })
     }
 
-  toggleVotes(){
-    this.showVotes = !this.showVotes
-    this.toggler.next(this.showVotes)
+  async vote(playerId: string, vote: number){
+    await this.dataService.vote(playerId, this.sessionService.sessionId, vote)
   }
 
-  clearVotes(){
-    this.playerService.clearPlayerVotes();
+  async toggleVotes(showVotes: boolean){
+    this.showVotes = showVotes;
+    await this.dataService.toggleVotes(this.sessionService.sessionId, showVotes);
+    this.toggler.next(this.showVotes);
+  }
+
+  async clearVotes(){
+    await this.dataService.clearVotes(this.sessionService.sessionId);
     this.showVotes = false;
-    this.toggler.next(this.showVotes)
+    await this.toggleVotes(this.showVotes);
     this.votes = [];
     this.votesCleared.next(true);
   }
@@ -34,13 +55,12 @@ export class VotingService {
     console.log("Updating Votes, new vote array:" + this.votes)
   }
 
-  setVotes(){
+  setVotes(players: Player[]){
     this.votes = []
-    let players = this.playerService.players;
 
     for (let player of players) {
       if (+player.vote != 0) {
-        this.votes.push(+player.vote)
+        this.votes.push(player.vote)
       }
     }
     console.log("setting votes: " + this.votes)
