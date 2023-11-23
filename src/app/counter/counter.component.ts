@@ -21,7 +21,7 @@ export class CounterComponent implements OnInit, OnDestroy{
 
   votes: number[] = [];
   voteCount: VoteCount[] = [];
-  average: number;
+  average: string;
   showVotes: boolean = false;
 
   constructor(private voteService: VotingService,
@@ -73,7 +73,7 @@ export class CounterComponent implements OnInit, OnDestroy{
       }
     }
     this.voteCount = this.voteCount.sort((a,b) => b.count - a.count )
-    this.average = Math.round((this.averageVotes()) * 100) / 100
+    this.average = "Average: " + Math.round((this.averageVotes()) * 100) / 100
   }
 
 

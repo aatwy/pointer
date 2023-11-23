@@ -3,6 +3,8 @@ import { Socket } from 'ngx-socket-io'
 
 import { Session } from '../session/session.model';
 import { Player } from '../players/player/player.model';
+import { NotificationService } from './toast/notification.service';
+import { NotificationType } from './toast/notification.message';
 
 
 @Injectable({providedIn: 'root'})
@@ -13,8 +15,13 @@ export class DataService {
   storyUpdated = this.socket.fromEvent<string>('storyUpdated');
 
   constructor(
-    private socket: Socket) {
-    socket.connect();
+    private socket: Socket,
+    private notificationService: NotificationService) {
+    this.connectToSocket();
+
+  }
+  async connectToSocket(){
+    await this.socket.connect();
   }
 
   async createSession(player: Player): Promise<Session>{
@@ -23,6 +30,10 @@ export class DataService {
         if(createdSession._id.toString().length === 24) {
           resolve(createdSession)
         } else {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error while trying to create session"
+          })
           reject(createdSession)
         }
       })
@@ -40,6 +51,10 @@ export class DataService {
         if ("_id" in session){
           resolve(session)
         } else {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error: Could get session"
+          })
           reject(`Error in getSession: ${session}`)
         }
       })
@@ -59,10 +74,16 @@ export class DataService {
         isAdmin: false
       };
       await this.socket.emit('addPlayer', newPlayer, sessionId, (createdPlayer: any) => {
+        console.log(createdPlayer)
         if ('_id' in createdPlayer) {
           resolve(createdPlayer);
         } else {
-          reject(`Error ${createdPlayer}`);
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: `Error occured while joining session: ${createdPlayer}`
+          })
+          console.log(createdPlayer)
+          reject(createdPlayer);
         }
       })
     })
