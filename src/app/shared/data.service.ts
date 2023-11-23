@@ -10,7 +10,7 @@ export class DataService {
   sessionUpdate = this.socket.fromEvent<Session>('sessionUpdated');
   voteUpdated = this.socket.fromEvent<Session>('voteUpdated');
   toggleShow = this.socket.fromEvent<boolean>('toggleShow');
-  storyUpdated = this.socket.fromEvent<string>('storyUpdated')
+  storyUpdated = this.socket.fromEvent<string>('storyUpdated');
 
   constructor(
     private socket: Socket) {

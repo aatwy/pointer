@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Player } from './player.model';
 import { PlayerService } from 'src/app/shared/player.service';
 import { Subscription } from 'rxjs';
@@ -10,11 +10,12 @@ import { SessionService } from 'src/app/shared/session.service';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.css']
 })
-export class PlayerComponent implements OnInit{
+export class PlayerComponent implements OnInit, OnDestroy{
   voteControl: number[] = [.5,1,2,3,5,8,13,20,40,100,0]
   currentVote: number;
   currentPlayer:Player;
-  clearVote: Subscription;
+  votesClearedSub = new Subscription();
+  votesUpdatedSub = new Subscription();
 
   constructor(
     private votingService: VotingService,
@@ -27,10 +28,19 @@ export class PlayerComponent implements OnInit{
     })
     this.currentPlayer = this.sessionService.player;
 
-    this.clearVote = this.votingService.votesCleared.subscribe(() => {
+    this.votesClearedSub = this.votingService.votesCleared.subscribe(() => {
       this.currentVote = null;
     })
+    this.votesUpdatedSub = this.sessionService.voteUdpated.subscribe(() => {
+      this.currentVote = this.sessionService.session.players
+        .find(player => player._id === this.currentPlayer._id).vote
+    })
     this.currentVote = null
+  }
+
+  ngOnDestroy(): void {
+    this.votesClearedSub.unsubscribe();
+    this.votesUpdatedSub.unsubscribe();
   }
 
   isClicked(vote: number){

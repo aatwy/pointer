@@ -42,6 +42,7 @@ export class VotingService {
 
   async clearVotes(){
     await this.dataService.clearVotes(this.sessionService.sessionId);
+    this.dataService.updateStory(this.sessionService.sessionId, "")
     this.showVotes = false;
     await this.toggleVotes(this.showVotes);
     this.votes = [];

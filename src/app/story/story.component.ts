@@ -35,7 +35,6 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.storySub = this.dataService.storyUpdated.subscribe((story) => {
       this.story = story
     })
-
   }
 
   ngOnDestroy(): void {
