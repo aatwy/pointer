@@ -17,7 +17,6 @@ export class DataService {
     socket.connect();
   }
 
-
   async createSession(player: Player): Promise<Session>{
     return new Promise( async (resolve, reject) => {
       await this.socket.emit('createSession', player, (createdSession: Session) => {
@@ -91,4 +90,11 @@ export class DataService {
   async updateStory(sessionId: string, story: string){
     this.socket.emit('updateStory', sessionId, story);
   }
+
+  async leaveRoom(sessionId: string) {
+    await this.socket.emit('leaveRoom', sessionId);
+  }
+
 }
+
+

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SessionService } from '../shared/session.service';
-import { Subscription, TimeInterval } from 'rxjs';
-import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -19,24 +18,16 @@ export class HeaderComponent implements OnInit, OnDestroy{
 
   constructor(
     private sessionService: SessionService,
-    private router: Router,
     private clipboard: Clipboard){
-
     }
 
   ngOnInit(): void {
     this.sessionSub = this.sessionService.sessionSet.subscribe((sessionId) => {
       if(sessionId){
-        console.log('SESSION ID FOUND', sessionId)
-
-        const parsedUrl = new URL(window.location.href)
-        this.session = parsedUrl.toString();
         this.buttonText = "Share Session"
         this.inSession = true;
       } else {
-        console.log('NO SESSION ID FOUND', sessionId)
         this.inSession = false;
-        this.session = null;
         this.buttonText = "Share Link"
       }
       clearTimeout(this.shareTimer)
@@ -50,6 +41,8 @@ export class HeaderComponent implements OnInit, OnDestroy{
   }
 
   onShare(){
+    const parsedUrl = new URL(window.location.href)
+    this.session = parsedUrl.toString();
     this.clipboard.copy(this.session);
     if(this.inSession){
       this.buttonText = "Session Link copied";

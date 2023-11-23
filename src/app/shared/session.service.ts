@@ -42,7 +42,6 @@ export class SessionService {
       this.session.players = session.players;
       this.voteUdpated.next(session.players);
     })
-
   }
 
   checkCookie() {
@@ -126,10 +125,12 @@ export class SessionService {
   }
 
   resetSession(){
+    this.dataService.leaveRoom(this.sessionId);
     this.session = null;
     this.sessionId = null;
     this.player = null;
-    this.sessionSet.next(null)
+    this.joiningSession = null;
+    this.sessionSet.next(null);
   }
 
 

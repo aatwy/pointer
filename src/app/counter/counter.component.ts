@@ -54,7 +54,7 @@ export class CounterComponent implements OnInit, OnDestroy{
       return 0;
     }
     let total = this.votes.reduce((sum, current) => sum + current)
-    return (total / this.voteCount.length)
+    return (total / this.votes.length)
   }
 
   countVotes() {
