@@ -33,7 +33,6 @@ export class PlayersComponent implements OnInit, OnDestroy {
     })
     // Subscribe to listen for any changes on toggling the player votes
     this.voteControlSub = this.votingService.toggler.subscribe((showVotes) => {
-      console.log('asdfasfafs')
       this.showVotes = showVotes
     })
   }

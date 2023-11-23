@@ -33,17 +33,13 @@ export class SessionService {
     private dataService: DataService){
 
     dataService.sessionUpdate.subscribe((session) => {
-      console.log('update received from socket');
-      console.log(session);
       this.session = session;
       this.sessionUpdated.next(this.session);
     })
     // Vote updated recieved from socket, update current votes
     // in players array
     dataService.voteUpdated.subscribe((session) => {
-      console.log('Vote update received from server');
       this.session.players = session.players;
-      console.log('When Votes.next is fired', session)
       this.voteUdpated.next(session.players);
     })
 
@@ -59,7 +55,6 @@ export class SessionService {
   getCookie(): Cookie {
     if (this.checkCookie()) {
       let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'));
-      this.sessionSet.next(cookie.sessionId)
       return cookie;
     }
     return this.createSessionCookie()
@@ -74,7 +69,6 @@ export class SessionService {
     // Set cookie
     this.cookieService.set('pointingSession', stringCookie, expirationDate)
     let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'))
-    this.sessionSet.next(cookie.sessionId)
     return cookie;
   }
 
@@ -89,7 +83,6 @@ export class SessionService {
   }
 
   async createSession(playerName: string){
-    console.log('creating session')
     await this.dataService.createSession({name: playerName, online: true})
       .then(async (session) => {
       this.sessionId = session._id.toString();
@@ -97,8 +90,8 @@ export class SessionService {
         this.session = session;
         // Set the current player to the player that just created the session
         this.createSessionCookie();
-        this.playerSet.next(this.player);
         this.sessionUpdated.next(this.session);
+        this.playerSet.next(this.player);
       }).catch((error) =>{
         // do something with error, probably setup an error message alert
       })
@@ -109,9 +102,6 @@ export class SessionService {
       .then(async (player:Player) =>{
         this.player = player;
         this.session = await this.getSession(this.sessionId)
-        console.log('In join Session: session + player')
-        console.log(this.session)
-        console.log(this.player)
         this.createSessionCookie();
         this.sessionUpdated.next(this.session);
     }).catch((error) => {
@@ -133,7 +123,13 @@ export class SessionService {
       // do something with error later
       console.log(`Error while rejoining session ${e}`);
     })
+  }
 
+  resetSession(){
+    this.session = null;
+    this.sessionId = null;
+    this.player = null;
+    this.sessionSet.next(null)
   }
 
 

@@ -10,7 +10,7 @@
           class="input-group mb-3"
           placeholder="enter story..."
           [(ngModel)]="story"
-          (change)="onStoryUpdated()">
+          (ngModelChange)="onStoryUpdated()">
         <button
           id="voteToggle"
           (click)="toggleVote()"

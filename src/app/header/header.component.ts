@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SessionService } from '../shared/session.service';
-import { Subscription, timeInterval } from 'rxjs';
+import { Subscription, TimeInterval } from 'rxjs';
 import { Router } from '@angular/router';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -9,12 +9,13 @@ import { Clipboard } from '@angular/cdk/clipboard';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit, OnDestroy{
   session: string;
-  sessionSet: boolean = false;
-  buttonText: string = "Share"
+  inSession: boolean = false;
+  buttonText: string = "Share Link";
+  shareTimer: any;
 
-  sessionSub: Subscription;
+  sessionSub = new Subscription();
 
   constructor(
     private sessionService: SessionService,
@@ -23,19 +24,43 @@ export class HeaderComponent implements OnInit{
 
     }
 
-
   ngOnInit(): void {
     this.sessionSub = this.sessionService.sessionSet.subscribe((sessionId) => {
-      const parsedUrl = new URL(window.location.href)
-      this.session = parsedUrl.toString();
-      this.sessionSet = true;
+      if(sessionId){
+        console.log('SESSION ID FOUND', sessionId)
+
+        const parsedUrl = new URL(window.location.href)
+        this.session = parsedUrl.toString();
+        this.buttonText = "Share Session"
+        this.inSession = true;
+      } else {
+        console.log('NO SESSION ID FOUND', sessionId)
+        this.inSession = false;
+        this.session = null;
+        this.buttonText = "Share Link"
+      }
+      clearTimeout(this.shareTimer)
     })
+    const parsedUrl = new URL(window.location.href)
+    this.session = parsedUrl.toString();
+  }
+
+  ngOnDestroy(): void {
+    this.sessionSub.unsubscribe();
   }
 
   onShare(){
-    this.clipboard.copy(this.session)
-    this.buttonText = 'Link Copied!'
-    let timer = setInterval( ()=> {this.buttonText = 'Share'}, 2000)
+    this.clipboard.copy(this.session);
+    if(this.inSession){
+      this.buttonText = "Session Link copied";
+      this.shareTimer = setTimeout(() => { this.buttonText = 'Share Session' }, 2000);
+    } else {
+      this.buttonText = 'Link Copied!';
+      this.shareTimer = setInterval(() => { this.buttonText = 'Share Link' }, 2000);
+    }
+  }
 
+  onGoHome(){
+    this.sessionService.resetSession()
   }
 }

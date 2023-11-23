@@ -17,7 +17,6 @@ export class VotingService {
   toggler = new Subject<boolean>();
 
   constructor(
-    private playerService: PlayerService,
     private sessionService: SessionService,
     private dataService: DataService){
 
@@ -26,7 +25,6 @@ export class VotingService {
       })
 
       this.dataService.toggleShow.subscribe((toggle) => {
-        console.log('toggle triggered')
         this.showVotes = toggle;
         this.toggler.next(toggle)
       })
@@ -52,7 +50,6 @@ export class VotingService {
 
   updateVotes(){
     this.votesChanged.next(this.votes)
-    console.log("Updating Votes, new vote array:" + this.votes)
   }
 
   setVotes(players: Player[]){
@@ -63,7 +60,6 @@ export class VotingService {
         this.votes.push(player.vote)
       }
     }
-    console.log("setting votes: " + this.votes)
     this.updateVotes();
   }
 

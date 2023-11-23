@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Cookie, SessionService } from '../shared/session.service';
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { PlayerService } from '../shared/player.service';
@@ -9,7 +9,7 @@ import { switchMap } from 'rxjs';
   templateUrl: './session.component.html',
   styleUrls: ['./session.component.css']
 })
-export class SessionComponent implements OnInit {
+export class SessionComponent implements OnInit, AfterViewInit{
   cookie: Cookie;
 
   constructor(
@@ -39,7 +39,11 @@ export class SessionComponent implements OnInit {
       this.cookie = null;
       this.sessionService.joiningSession = true;
       this.router.navigate([''])
+
     }
+  }
+  ngAfterViewInit(){
+    this.sessionService.sessionSet.next(this.sessionService.sessionId)
   }
 
 }

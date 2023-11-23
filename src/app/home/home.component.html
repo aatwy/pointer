@@ -1,16 +1,14 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-4 col-12 offset-lg-4 mt-2">
-      <h1>♠️♦️ Pointing Poker ♥️♣️</h1>
-      <hr>
-      <div class="d-flex justify-content-center">
-      <div class="btn btn-outline-primary" (click)="openModal()">Create Session</div>
-      <div class="btn btn-outline-primary" (click)="getSession()">Get Session Test</div>
-
-      </div>
-    </div>
+  <div class="flex-row mt-2">
+    <h1>♠️♦️ Pointing Poker ♥️♣️</h1>
+  </div>
+  <div class="col-lg-4 col-12 offset-lg-4 mt-2">
+    <hr>
+  </div>
+  <div class="flex-row d-flex justify-content-center mt-4">
+    <div class="btn btn-outline-primary" (click)="openModal()">Create Session</div>
   </div>
 </div>
 
-<app-session-modal #modal data-bs-backdrop="static" [modalConfig]="modalConfig"></app-session-modal>
-
+<app-session-modal #modal data-bs-backdrop="static"
+  [modalConfig]="modalConfig"></app-session-modal>

@@ -6,11 +6,10 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a routerLink=""><img class="navb" src="../../assets/logo-header.svg"></a>
+      <a routerLink=""><img class="navb" src="../../assets/logo-header.svg" (click)="onGoHome()"></a>
       <div class="me-auto"></div>
       <div class="d-flex">
         <button
-          [disabled]="!sessionSet"
           id="shareButton"
           class="btn btn-outline-primary"
           (click)="onShare()">{{ buttonText }}</button>

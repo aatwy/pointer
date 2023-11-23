@@ -26,8 +26,6 @@ export class PlayerComponent implements OnInit{
       this.currentPlayer = updatedPlayer
     })
     this.currentPlayer = this.sessionService.player;
-    console.log("Current player in player component:")
-    console.log(this.currentPlayer)
 
     this.clearVote = this.votingService.votesCleared.subscribe(() => {
       this.currentVote = null;

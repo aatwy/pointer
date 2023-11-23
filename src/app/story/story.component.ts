@@ -34,7 +34,6 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.story = ""
     this.storySub = this.dataService.storyUpdated.subscribe((story) => {
       this.story = story
-      console.log('fired!')
     })
 
   }

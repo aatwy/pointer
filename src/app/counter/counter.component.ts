@@ -40,7 +40,6 @@ export class CounterComponent implements OnInit, OnDestroy{
       this.showVotes = show;
     })
     this.votes = this.voteService.votes;
-    console.log(`votes in ngInit of counter components ${this.votes}`)
     this.countVotes();
   }
 
@@ -65,7 +64,7 @@ export class CounterComponent implements OnInit, OnDestroy{
       return (votes.filter((x) => x == vote).length);
     }
 
-    let pointSequence: number[] = [0,1,2,3,5,8,13,20,40,100]
+    let pointSequence: number[] = [0.5,1,2,3,5,8,13,20,40,100]
 
     for (let point of pointSequence ) {
       if (this.votes.includes(point)){
@@ -75,7 +74,6 @@ export class CounterComponent implements OnInit, OnDestroy{
     }
     this.voteCount = this.voteCount.sort((a,b) => b.count - a.count )
     this.average = Math.round((this.averageVotes()) * 100) / 100
-    console.log("current votecount: " + this.voteCount)
   }
 
 

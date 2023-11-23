@@ -37,18 +37,17 @@ export class SessionModalComponent implements OnInit{
 
   async onClick(){
     if(this.sessionService.joiningSession) {
-      console.log('joining session')
       // Need to add a check if the session is valid or not, if not then  show error rather than navigate onwards
       await this.sessionService.joinSession(this.userName)
     } else {
-      console.log('creating session')
       await this.sessionService.createSession(this.userName);
     }
 
     this.createClicked = true;
     this.close();
-    this.router.navigate([`/session/`, this.sessionService.sessionId], {relativeTo: this.route})
+    await this.router.navigate([`/session/`, this.sessionService.sessionId], {relativeTo: this.route})
     this.createClicked = false;
+
   }
 
   open(): Promise<boolean> {
