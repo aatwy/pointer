@@ -19,8 +19,8 @@ import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
 import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 
-// const config: SocketIoConfig = { url: 'https://pointingpoker-5qeb.onrender.com', options: {}};
-const config: SocketIoConfig = { url: 'http://localhost:80', options: {}};
+const config: SocketIoConfig = { url: 'https://pointingpoker-5qeb.onrender.com', options: {}};
+// const config: SocketIoConfig = { url: 'http://localhost:80', options: {}};
 
 @NgModule({
   declarations: [

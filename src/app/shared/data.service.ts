@@ -94,7 +94,6 @@ export class DataService {
         isAdmin: false
       };
       await this.socket.emit('addPlayer', newPlayer, sessionId, (createdPlayer: any) => {
-        console.log(createdPlayer)
         try {
           if ('_id' in createdPlayer) {
             resolve(createdPlayer);
@@ -106,7 +105,6 @@ export class DataService {
             type: NotificationType.error,
             message: `Error occured while joining session: ${createdPlayer}`
           })
-          console.log(createdPlayer)
           reject(createdPlayer);
         }
       })
