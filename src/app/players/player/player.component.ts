@@ -1,6 +1,5 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Player } from './player.model';
-import { PlayerService } from 'src/app/shared/player.service';
 import { Subscription } from 'rxjs';
 import { VotingService } from 'src/app/shared/voting.service';
 import { SessionService } from 'src/app/shared/session.service';

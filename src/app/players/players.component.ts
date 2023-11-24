@@ -3,7 +3,6 @@ import { Player } from './player/player.model';
 import { VotingService } from '../shared/voting.service';
 import { Subscription } from 'rxjs';
 import { SessionService } from '../shared/session.service';
-import { DataService } from '../shared/data.service';
 
 @Component({
   selector: 'app-players',

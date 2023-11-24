@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { VotingService } from '../shared/voting.service';
 import { SessionService } from '../shared/session.service';
-import { PlayerService } from '../shared/player.service';
-import { Subject, Subscription } from 'rxjs';
-import { Player } from '../players/player/player.model';
 import { DataService } from '../shared/data.service';
 
 @Component({

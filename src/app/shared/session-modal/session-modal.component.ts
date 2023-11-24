@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Injectable, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 import { ModalConfig } from 'src/app/shared/modal.config.interface';
 import { SessionService } from 'src/app/shared/session.service';
 

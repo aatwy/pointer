@@ -1,8 +1,9 @@
 import { Injectable, ViewChild } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Subject } from "rxjs";
+
 import { SessionModalComponent } from "./session-modal/session-modal.component";
 import { ModalConfig } from "./modal.config.interface";
-import { Subject } from "rxjs";
 
 
 @Injectable({

@@ -1,10 +1,9 @@
 import { Injectable } from "@angular/core";
-
 import { Subject } from "rxjs";
+
 import { SessionService } from "./session.service";
 import { Player } from "../players/player/player.model";
 import { DataService } from "./data.service";
-import { Session } from "../session/session.model";
 
 @Injectable({providedIn: 'root'})
 export class VotingService {
