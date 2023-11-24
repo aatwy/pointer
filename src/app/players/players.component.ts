@@ -3,6 +3,7 @@ import { Player } from './player/player.model';
 import { VotingService } from '../shared/voting.service';
 import { Subscription } from 'rxjs';
 import { SessionService } from '../shared/session.service';
+import { DataService } from '../shared/data.service';
 
 @Component({
   selector: 'app-players',
@@ -11,9 +12,10 @@ import { SessionService } from '../shared/session.service';
 })
 
 export class PlayersComponent implements OnInit, OnDestroy {
-  voteControlSub: Subscription;
+  voteControlSub =new Subscription();
+  votesUpdatedSub = new Subscription();
   showVotes:boolean = false;
-  players: Player[];
+  players: Player[] = [];
 
   constructor(
     private votingService: VotingService,
@@ -28,8 +30,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
       this.players = this.sessionService.session.players;
     }
     // Subscribe to listen for vote updates
-    this.sessionService.voteUdpated.subscribe((updatedPlayers) => {
-      this.players = updatedPlayers;
+    this.votesUpdatedSub = this.votingService.votesChanged.subscribe((players) => {
+      this.players = players;
     })
     // Subscribe to listen for any changes on toggling the player votes
     this.voteControlSub = this.votingService.toggler.subscribe((showVotes) => {
@@ -38,7 +40,8 @@ export class PlayersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.voteControlSub.unsubscribe
+    this.voteControlSub.unsubscribe();
+    this.votesUpdatedSub.unsubscribe();
   }
 
 }

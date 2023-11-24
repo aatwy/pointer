@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
-import { v4 as uuid } from 'uuid';
+import { Subject, Subscription } from "rxjs";
+
 import { Player } from "../players/player/player.model";
 import { PlayerService } from "./player.service";
-import { Subject, Subscription } from "rxjs";
 import { DataService } from "./data.service";
 import { Session } from "../session/session.model";
 
@@ -20,6 +20,7 @@ export class SessionService {
   sessionUpdated = new Subject<Session>();
   playerSet = new Subject<Player>();
   voteUdpated = new Subject<Player[]>();
+  playerRejoined = new Subject<Session>();
 
   joiningSession: boolean = false;
   session: Session;
@@ -44,6 +45,10 @@ export class SessionService {
     })
   }
 
+  /**
+   * Checks if a cookie exists or not
+   * @returns True if cookie exists, false if not
+   */
   checkCookie() {
     if (this.cookieService.check('pointingSession')) {
       return true;
@@ -51,6 +56,10 @@ export class SessionService {
     return false;
   }
 
+  /**
+   * Gets the cookie if it exists, creates one and returns it if it does not.
+   * @returns Found or Created cookie, no milk provided.
+   */
   getCookie(): Cookie {
     if (this.checkCookie()) {
       let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'));
@@ -59,18 +68,33 @@ export class SessionService {
     return this.createSessionCookie()
   }
 
+  /**
+   * Creates a cookie, uses the currently set sessionId and player, cookie has 1 hour expiration time.
+   * @returns new session cookie created using the sessionId and player.
+   */
   private createSessionCookie() {
     // Set Expiration Date to 1 hour from now
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 1);
     // Stringify the cookie to hold more than 1 value
-    let stringCookie = JSON.stringify({ 'sessionId': this.sessionId, 'playerId': this.player._id})
+    let stringCookie = JSON.stringify({
+      'sessionId': this.sessionId, 'playerId': this.player._id
+    })
     // Set cookie
-    this.cookieService.set('pointingSession', stringCookie, expirationDate)
+    this.cookieService.set(
+      'pointingSession',
+      stringCookie,
+      expirationDate,
+      `session`)
     let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'))
     return cookie;
   }
 
+  /**
+   * Will send a request over the socket to retrieve a session.
+   * @param sessionId _id of sessioin to get.
+   * @returns Session if found, error otherwise.
+   */
   async getSession(sessionId:string): Promise<Session> {
     return new Promise(async (resolve, reject) => {
       this.dataService.getSession(sessionId).then((session) => {
@@ -81,6 +105,10 @@ export class SessionService {
     })
   }
 
+  /**
+   * Creates a session given the player name, sets the session and player in the object if succesful.
+   * @param playerName Name of player to create the session for.
+   */
   async createSession(playerName: string){
     await this.dataService.createSession({name: playerName, online: true})
       .then(async (session) => {
@@ -89,34 +117,47 @@ export class SessionService {
         this.session = session;
         // Set the current player to the player that just created the session
         this.createSessionCookie();
-        this.sessionUpdated.next(this.session);
-        this.playerSet.next(this.player);
+        // this.sessionUpdated.next(this.session);
+        // this.playerSet.next(this.player);
       }).catch((error) =>{
         // do something with error, probably setup an error message alert
       })
   }
 
+  /**
+   * Adds a player to a session, creates a cookie once the player has joined.
+   * Sets the player and sessionId as well
+   * @param playerName Name of player to join session with.
+   */
   async joinSession(playerName: string){
     await this.playerService.addPlayer({name: playerName}, this.sessionId)
       .then(async (player:Player) =>{
+        // set player and session
         this.player = player;
         this.session = await this.getSession(this.sessionId)
         this.createSessionCookie();
-        this.sessionUpdated.next(this.session);
+        // broadcast the updates
+        this.playerSet.next(this.player)
     }).catch((error) => {
       // do something with this later
       console.log(`Error during joinSession: ${error}`)
     });
   }
 
+  /**
+   * Connects to the socket , which add this player to the room if a new socketId is used.
+   * Updates players array, session and player.
+   * @param playerId _id of player to rejoin the session with
+   * @param sessionId  _id of the session to rejoin
+   */
   async rejoinSession(playerId: string, sessionId: string){
     // retrieve session from server, populate sessionService variabels
     // send out update
     await this.getSession(sessionId).then((session) => {
+      // set session and player
       this.session = session;
-      this.sessionUpdated.next(this.session);
-      let players = this.session.players;
-      this.player = players[players.findIndex((player) => player._id === playerId)];
+      this.player = session.players.find(player => player._id === playerId);
+      // broadcast the updates
       this.playerSet.next(this.player);
     }).catch((e) => {
       // do something with error later
@@ -124,6 +165,9 @@ export class SessionService {
     })
   }
 
+  /**
+   * Clears session info, player info, and leaves the session/room for the socket
+   */
   resetSession(){
     this.dataService.leaveRoom(this.sessionId);
     this.session = null;

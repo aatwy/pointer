@@ -31,14 +31,11 @@ export class HomeComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {
     if (this.sessionService.joiningSession) {
-      this.openModal()
+      this.onCreateSession()
     }
   }
 
-  async openModal() {
+  async onCreateSession() {
     return await this.modalComponent.open()
-  }
-
-  async getSession(){
   }
 }

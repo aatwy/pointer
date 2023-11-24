@@ -5,9 +5,12 @@ import { Session } from '../session/session.model';
 import { Player } from '../players/player/player.model';
 import { NotificationService } from './toast/notification.service';
 import { NotificationType } from './toast/notification.message';
+import { Router } from '@angular/router';
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+   providedIn: 'root'
+})
 export class DataService {
   sessionUpdate = this.socket.fromEvent<Session>('sessionUpdated');
   voteUpdated = this.socket.fromEvent<Session>('voteUpdated');
@@ -16,14 +19,25 @@ export class DataService {
 
   constructor(
     private socket: Socket,
-    private notificationService: NotificationService) {
+    private notificationService: NotificationService,
+    private router: Router) {
     this.connectToSocket();
 
   }
+
+  /**
+   * Connects to the socket given the connection was setup in app.module
+   */
   async connectToSocket(){
     await this.socket.connect();
   }
 
+  /**
+   * Creates a session using the player passed in, this will return a session with the current player
+   * set as the admin
+   * @param player Player to create the session for.
+   * @returns Session with player already added as admin
+   */
   async createSession(player: Player): Promise<Session>{
     return new Promise( async (resolve, reject) => {
       await this.socket.emit('createSession', player, (createdSession: Session) => {
@@ -41,31 +55,37 @@ export class DataService {
   }
 
   /**
-   * test function
-   * @param sessionId
+   * Gets session given the sessionId, will return an error if the id is not valid ,
+   * or session is not found.
+   * @param sessionId _id of the session to retrieve
+   * @returns Session if found, error if not
    */
   async getSession(sessionId: string): Promise<Session>{
 
     return new Promise(async (resolve, reject)  => {
       await this.socket.emit('getSession', sessionId, (session: Session) => {
-        if ("_id" in session){
-          resolve(session)
-        } else {
+        try{
+          if ("_id" in session) {
+            resolve(session)
+          }
+        } catch (error){
           this.notificationService.sendMessage({
             type: NotificationType.error,
             message: "Error: Could get session"
           })
-          reject(`Error in getSession: ${session}`)
+          reject(`Error in getSession: ${error}`)
         }
+
       })
     })
   }
 
   /**
-   *
-   * @param playerToCreate
-   * @param sessionId
-   * @returns
+   * Adds a player to an existing session, returns the player. An event will be triggered if succesful
+   * which will update the players array.
+   * @param  playerToCreate Player to add to the session
+   * @param  sessionId _id of the session to add the player to
+   * @returns Player wrapped in a promise.
    */
   async addPlayer(playerToCreate: Player, sessionId: string): Promise<Player> {
     return new Promise(async (resolve, reject) => {
@@ -75,9 +95,13 @@ export class DataService {
       };
       await this.socket.emit('addPlayer', newPlayer, sessionId, (createdPlayer: any) => {
         console.log(createdPlayer)
-        if ('_id' in createdPlayer) {
-          resolve(createdPlayer);
-        } else {
+        try {
+          if ('_id' in createdPlayer) {
+            resolve(createdPlayer);
+          }
+        } catch {
+          this.router.navigate(['']);
+          // this.modal.closeModal();
           this.notificationService.sendMessage({
             type: NotificationType.error,
             message: `Error occured while joining session: ${createdPlayer}`
@@ -86,32 +110,55 @@ export class DataService {
           reject(createdPlayer);
         }
       })
+
     })
   }
 
   /**
-   *
-   * @param playerId
-   * @param sessionId
-   * @param vote
+   * Updates/Adds a vote for a player in a session. An event will be triggered if successful
+   * which will update the players array .
+   * @param playerId  _id of player to set vote for.
+   * @param sessionId _id of session to update player vote in
+   * @param vote vote value to set for the player
    */
   async vote(playerId: string, sessionId: string, vote: number): Promise<Boolean> {
     await this.socket.emit('updateVote', playerId, sessionId, vote)
     return Promise.resolve(true)
   }
 
+  /**
+   * Clears all votes in a given session. An event will be triggered if successful
+   * which will update the players array .
+   * @param sessionId _id of session to clear votes for.
+   */
   async clearVotes(sessionId: string){
     await this.socket.emit('clearVotes', sessionId)
   }
 
+  /**
+   * Toggles the show / hide vote for all players the session.An event will be triggered if successful
+   * which will update the players array .
+   * @param sessionId _id of session to show/hide votes for
+   * @param show show or hide: true = show, false = hides  votes
+   */
   async toggleVotes(sessionId: string, show: boolean){
     this.socket.emit('toggleShow', sessionId, show)
   }
 
+  /**
+   * Update the story for all players in the session. An event will be triggered if successful
+   * which will update the players array .
+   * @param sessionId _id of the session to update the story in
+   * @param story text to set for the story
+   */
   async updateStory(sessionId: string, story: string){
     this.socket.emit('updateStory', sessionId, story);
   }
 
+  /**
+   * Will remove the current socket from the given session/room
+   * @param sessionId _id for the session/room to leave.
+   */
   async leaveRoom(sessionId: string) {
     await this.socket.emit('leaveRoom', sessionId);
   }

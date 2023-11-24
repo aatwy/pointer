@@ -1,4 +1,4 @@
-import { Component, Injectable, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injectable, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalConfig } from 'src/app/shared/modal.config.interface';
@@ -10,7 +10,7 @@ import { SessionService } from 'src/app/shared/session.service';
   styleUrls: ['./session-modal.component.css']
 })
 @Injectable()
-export class SessionModalComponent implements OnInit{
+export class SessionModalComponent implements OnInit, AfterViewInit{
   @Input() public modalConfig: ModalConfig;
   @ViewChild('modal') private modalContent: TemplateRef<SessionModalComponent>;
   private modalRef: NgbModalRef;
@@ -26,28 +26,31 @@ export class SessionModalComponent implements OnInit{
     private route: ActivatedRoute,
     private config: NgbModalConfig) {
 
-      if(sessionService.joiningSession) {
-        config.backdrop = 'static';
-        config.keyboard = false;
-      }
     }
 
   ngOnInit(): void {
   }
 
+  ngAfterViewInit(): void {
+    if (this.sessionService.joiningSession) {
+      this.config.backdrop = 'static';
+      this.config.keyboard = false;
+    }
+  }
+
   async onClick(){
+    this.createClicked = true;
     if(this.sessionService.joiningSession) {
       // Need to add a check if the session is valid or not, if not then  show error rather than navigate onwards
       await this.sessionService.joinSession(this.userName)
     } else {
       await this.sessionService.createSession(this.userName);
     }
-
-    this.createClicked = true;
     this.close();
-    await this.router.navigate([`/session/`, this.sessionService.sessionId], {relativeTo: this.route})
     this.createClicked = false;
-
+    if(!this.sessionService.joiningSession) {
+      await this.router.navigate([`/session/`, this.sessionService.sessionId], { relativeTo: this.route })
+    }
   }
 
   open(): Promise<boolean> {

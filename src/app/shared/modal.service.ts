@@ -1,19 +1,34 @@
-import { Injectable } from "@angular/core";
+import { Injectable, ViewChild } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { SessionModalComponent } from "./session-modal/session-modal.component";
+import { ModalConfig } from "./modal.config.interface";
+import { Subject } from "rxjs";
 
 
-@Injectable({providedIn: 'root'})
+@Injectable({
+  providedIn: 'root'
+})
 export class ModalService {
-  modal: any;
+  @ViewChild('modal') private modalComponent: SessionModalComponent
+  modalCommand = new Subject<any>;
+  modalConfig: ModalConfig;
+  modalRef:any;
 
 
   constructor(private modalService: NgbModal ){}
-
-  openModal(content: any) {
-    this.modal = this.modal.open(content);
+  /**
+   * Opens the modal with the provided content
+   * @param content content to open the modal with (configuration based on the config template)
+   */
+  async open(config: ModalConfig) {
+    this.modalConfig = config;
+    this.modalComponent.open();
   }
 
-  closeModal(){
-    this.modal.close();
+  /**
+   * Closes current modal
+   */
+  close(){
+    this.modalComponent.close();
   }
 }

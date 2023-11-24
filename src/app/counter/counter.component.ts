@@ -29,12 +29,17 @@ export class CounterComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.sessionSub = this.sessionService.sessionUpdated.subscribe((session) => {
-
+      if(this.sessionService.player.isAdmin === true){
+        this.voteService.toggleVotes(this.showVotes);
+        this.voteService.votesChanged.next(this.sessionService.session.players)
+      }
     })
-    this.voterSub = this.voteService.votesChanged.subscribe((votes) => {
-      this.votes = votes;
+
+    this.voterSub = this.voteService.votesChanged.subscribe((session) => {
+      this.votes = this.voteService.votes;
       this.countVotes();
-    } )
+    })
+    this.votes = this.voteService.votes;
 
     this.voteTogglerSub = this.voteService.toggler.subscribe((show) => {
       this.showVotes = show;

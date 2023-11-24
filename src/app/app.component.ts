@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { ModalConfig } from './shared/modal.config.interface';
+import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class AppComponent implements OnInit{
   title = 'pointer';
+  @ViewChild('modal') private modalComponent: SessionModalComponent
+
+  modalConfig: ModalConfig;
 
   constructor( private toastr: ToastrService){
 

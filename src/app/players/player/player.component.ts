@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Player } from './player.model';
 import { PlayerService } from 'src/app/shared/player.service';
 import { Subscription } from 'rxjs';
@@ -24,17 +24,19 @@ export class PlayerComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.sessionService.playerSet.subscribe((updatedPlayer)=>{
-      this.currentPlayer = updatedPlayer
+      this.currentPlayer = updatedPlayer;
+      this.currentVote = updatedPlayer.vote;
     })
     this.currentPlayer = this.sessionService.player;
 
     this.votesClearedSub = this.votingService.votesCleared.subscribe(() => {
       this.currentVote = null;
     })
-    this.votesUpdatedSub = this.sessionService.voteUdpated.subscribe(() => {
-      this.currentVote = this.sessionService.session.players
-        .find(player => player._id === this.currentPlayer._id).vote
-    })
+    this.votesUpdatedSub = this.votingService.votesChanged.subscribe((players) => {
+      if(this.currentPlayer) {
+        this.currentVote =  players.find(player => player._id === this.currentPlayer._id).vote
+      }
+      })
     this.currentVote = null
   }
 

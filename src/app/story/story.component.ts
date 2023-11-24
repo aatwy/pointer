@@ -12,8 +12,9 @@ import { DataService } from '../shared/data.service';
   styleUrls: ['./story.component.css']
 })
 export class StoryComponent implements OnInit, OnDestroy {
-  playerSet = new Subscription();
+  playerSetSub = new Subscription();
   storySub = new Subscription();
+  sessionUpdatedSub = new Subscription();
   story: string;
   showVotes: boolean = false;
   admin: boolean = false;
@@ -25,9 +26,18 @@ export class StoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.playerSet = this.sessionService.playerSet.subscribe((player) => {
+    this.playerSetSub = this.sessionService.playerSet.subscribe((player) => {
       this.admin = player.isAdmin;
     })
+
+    this.sessionService.sessionUpdated.subscribe((session) => {
+      if (this.admin) {
+        if (this.story) {
+          this.onStoryUpdated();
+        }
+      }
+    })
+
     if (this.sessionService.player) {
       this.admin = this.sessionService.player.isAdmin;
     }
@@ -38,7 +48,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.playerSet.unsubscribe();
+    this.playerSetSub.unsubscribe();
     this.storySub.unsubscribe();
   }
 

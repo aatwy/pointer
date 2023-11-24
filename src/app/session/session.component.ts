@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Cookie, SessionService } from '../shared/session.service';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { PlayerService } from '../shared/player.service';
-import { switchMap } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { ModalConfig } from '../shared/modal.config.interface';
+import { SessionModalComponent } from '../shared/session-modal/session-modal.component';
 
 @Component({
   selector: 'app-session',
@@ -10,13 +10,22 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./session.component.css']
 })
 export class SessionComponent implements OnInit, AfterViewInit{
+  @ViewChild('modal') private modalComponent: SessionModalComponent
+
+  modalConfig: ModalConfig = {
+    modalTitle: 'Join Pointing Session',
+    closeButtonLabel: 'Join Session',
+    shouldDismiss: () => false,
+    hideDismissButton:() => true,
+
+  }
+
   cookie: Cookie;
+  newPlayer: boolean = false;
 
   constructor(
     private sessionService: SessionService,
-    private router: Router,
     private route: ActivatedRoute,){
-
     }
 
   async ngOnInit(): Promise<void> {
@@ -38,12 +47,18 @@ export class SessionComponent implements OnInit, AfterViewInit{
     } else {
       this.cookie = null;
       this.sessionService.joiningSession = true;
-      this.router.navigate([''])
-
+      this.newPlayer = true;
     }
   }
+
   ngAfterViewInit(){
     this.sessionService.sessionSet.next(this.sessionService.sessionId)
+    if (this.newPlayer) this.joinSession();
+
   }
 
+  async joinSession(){
+    return await this.modalComponent.open();
+  }
 }
+
