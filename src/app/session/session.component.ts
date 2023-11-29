@@ -39,7 +39,7 @@ export class SessionComponent implements OnInit, AfterViewInit{
     if(this.sessionService.player && this.sessionService.session){
       // we just created or joined a new session, so  nothing to do here
       // Check if cookie exists and matches session you are joining
-    } else if(this.sessionService.checkCookie() && this.sessionService.getCookie().sessionId === session){
+    } else if (this.sessionService.checkCookie(session) && this.sessionService.getCookie(session).sessionId === session){
       this.cookie = this.sessionService.getCookie();
       await this.sessionService.rejoinSession(this.cookie.playerId, this.cookie.sessionId)
       // Cookie does not exist, or does not match, then navigate to the home page and allow

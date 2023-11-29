@@ -49,8 +49,8 @@ export class SessionService {
    * Checks if a cookie exists or not
    * @returns True if cookie exists, false if not
    */
-  checkCookie() {
-    if (this.cookieService.check('pointingSession')) {
+  checkCookie(sessionId: string = this.sessionId) {
+    if (this.cookieService.check(`${sessionId}`)) {
       return true;
     }
     return false;
@@ -60,33 +60,31 @@ export class SessionService {
    * Gets the cookie if it exists, creates one and returns it if it does not.
    * @returns Found or Created cookie, no milk provided.
    */
-  getCookie(): Cookie {
+  getCookie(sessionId: string = this.sessionId): Cookie {
     if (this.checkCookie()) {
-      let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'));
+      let cookie: Cookie = { sessionId: sessionId, playerId: this.cookieService.get(`${sessionId}`)};
       return cookie;
     }
     return this.createSessionCookie()
   }
 
   /**
-   * Creates a cookie, uses the currently set sessionId and player, cookie has 1 hour expiration time.
+   * Creates a cookie, uses the currently set sessionId and player, cookie has an 8 hour expiration time.
+   * The cookie is using the sessionId as the key, and playerId as the value.
+   * So a user can have multiple cookies at the same time
    * @returns new session cookie created using the sessionId and player.
    */
-  private createSessionCookie() {
-    // Set Expiration Date to 1 hour from now
+  private createSessionCookie(sessionId: string = this.sessionId, playerId: string = this.player._id) {
+    // Set Expiration Date to 8 hours from now
     const expirationDate = new Date();
-    expirationDate.setHours(expirationDate.getHours() + 1);
-    // Stringify the cookie to hold more than 1 value
-    let stringCookie = JSON.stringify({
-      'sessionId': this.sessionId, 'playerId': this.player._id
-    })
+    expirationDate.setHours(expirationDate.getHours() + 8);
     // Set cookie
     this.cookieService.set(
-      'pointingSession',
-      stringCookie,
+      `${sessionId}`,
+      `${playerId}`,
       expirationDate,
       `session`)
-    let cookie: Cookie = JSON.parse(this.cookieService.get('pointingSession'))
+    let cookie: Cookie = this.getCookie(sessionId)
     return cookie;
   }
 
@@ -130,12 +128,13 @@ export class SessionService {
    * @param playerName Name of player to join session with.
    */
   async joinSession(playerName: string){
+    console.log("In Join Session", this.sessionId)
     await this.playerService.addPlayer({name: playerName}, this.sessionId)
       .then(async (player:Player) =>{
         // set player and session
         this.player = player;
         this.session = await this.getSession(this.sessionId)
-        this.createSessionCookie();
+        this.createSessionCookie(this.session._id, this.player._id);
         // broadcast the updates
         this.playerSet.next(this.player)
     }).catch((error) => {
