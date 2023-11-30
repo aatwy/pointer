@@ -77,7 +77,7 @@ export class SessionService {
   private createSessionCookie(sessionId: string = this.sessionId, playerId: string = this.player._id) {
     // Set Expiration Date to 8 hours from now
     const expirationDate = new Date();
-    expirationDate.setHours(expirationDate.getHours() + 3);
+    expirationDate.setHours(expirationDate.getHours() + 1);
     // Set cookie
     this.cookieService.set(
       `${sessionId}`,
