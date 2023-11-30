@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  socketURL: 'https://point-poker.trustwell.io:8443'
+  socketURL: 'https://point-poker.foodlogiq.io:8443'
 };

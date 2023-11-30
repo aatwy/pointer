@@ -18,8 +18,8 @@ WORKDIR /usr/share/nginx/html
 # Copy the build output
 COPY --from=build /usr/local/app/dist/pointer /usr/share/nginx/html
 # Copy your SSL certificate and private key
-COPY ./certs/cert.pem /etc/nginx/cert.pem
-COPY ./certs/key.pem /etc/nginx/key.pem
+# COPY ./certs/cert.pem /etc/nginx/cert.pem
+# COPY ./certs/key.pem /etc/nginx/key.pem
 # Remove the default Nginx configuration file
 RUN rm /etc/nginx/conf.d/default.conf
 # Copy a new configuration file
