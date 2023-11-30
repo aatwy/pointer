@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  socketURL: 'https://pointingpoker-5qeb.onrender.com'
+  socketURL: 'http://point-poker.trustwell.io:443'
 };
