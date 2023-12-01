@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { CookieService } from "ngx-cookie-service";
 import { Subject, Subscription } from "rxjs";
 
 import { Player } from "../players/player/player.model";
@@ -29,7 +28,6 @@ export class SessionService {
 
 
   constructor(
-    private cookieService: CookieService,
     private playerService: PlayerService,
     private dataService: DataService){
 
@@ -50,9 +48,13 @@ export class SessionService {
    * @returns True if cookie exists, false if not
    */
   checkCookie(sessionId: string = this.sessionId) {
-    if (this.cookieService.check(sessionId)) {
+    if(localStorage.getItem(sessionId)) {
       return true;
     }
+    // temporarily disabled cookies, not working on iOS
+    // if (this.cookieService.check(sessionId)) {
+    //   return true;
+    // }
     return false;
   }
 
@@ -62,13 +64,14 @@ export class SessionService {
    */
   getCookie(sessionId: string = this.sessionId): Cookie {
     if (this.checkCookie()) {
-      let cookie: Cookie = { sessionId: sessionId, playerId: this.cookieService.get(sessionId)};
+      let cookie: Cookie = { sessionId: sessionId, playerId: localStorage.getItem(sessionId)};
       return cookie;
     }
     return this.createSessionCookie()
   }
 
   /**
+   * Temporarily switched to local storage
    * Creates a cookie, uses the currently set sessionId and player, cookie has an 8 hour expiration time.
    * The cookie is using the sessionId as the key, and playerId as the value.
    * So a user can have multiple cookies at the same time
@@ -79,7 +82,8 @@ export class SessionService {
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 1);
     // Set cookie
-    this.cookieService.set(sessionId,playerId,expirationDate, 'session' )
+    localStorage.setItem(sessionId, playerId);
+    // this.cookieService.set(sessionId,playerId,expirationDate, 'session' )
     // this.cookieService.set(
     //   `${sessionId}`,
     //   `${playerId}`,
