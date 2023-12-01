@@ -50,7 +50,7 @@ export class SessionService {
    * @returns True if cookie exists, false if not
    */
   checkCookie(sessionId: string = this.sessionId) {
-    if (this.cookieService.check(`${sessionId}`)) {
+    if (this.cookieService.check(sessionId)) {
       return true;
     }
     return false;
@@ -62,7 +62,7 @@ export class SessionService {
    */
   getCookie(sessionId: string = this.sessionId): Cookie {
     if (this.checkCookie()) {
-      let cookie: Cookie = { sessionId: sessionId, playerId: this.cookieService.get(`${sessionId}`)};
+      let cookie: Cookie = { sessionId: sessionId, playerId: this.cookieService.get(sessionId)};
       return cookie;
     }
     return this.createSessionCookie()
@@ -79,11 +79,12 @@ export class SessionService {
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 1);
     // Set cookie
-    this.cookieService.set(
-      `${sessionId}`,
-      `${playerId}`,
-      expirationDate,
-      `session`)
+    this.cookieService.set(sessionId,playerId,expirationDate, 'session' )
+    // this.cookieService.set(
+    //   `${sessionId}`,
+    //   `${playerId}`,
+    //   expirationDate,
+    //   `session`)
     let cookie: Cookie = this.getCookie(sessionId)
     return cookie;
   }
