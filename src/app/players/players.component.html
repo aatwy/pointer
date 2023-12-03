@@ -20,18 +20,24 @@
             <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
           </tr>
         </ng-container>
-          <tr>
-            <th id="spectatorTh">Spectators</th>
-            <th></th>
-            <th></th>
+      </tbody>
+    </table>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th id="spectatorTh">Spectators</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let player of players">
+          <tr *ngIf="player.spectator">
+            <td>{{ player.name }}</td>
+            <td></td>
+            <td></td>
           </tr>
-          <ng-container *ngFor="let player of players">
-            <tr *ngIf="player.spectator">
-              <td>{{ player.name }}</td>
-              <td></td>
-              <td></td>
-            </tr>
-          </ng-container>
+        </ng-container>
       </tbody>
     </table>
     </div>

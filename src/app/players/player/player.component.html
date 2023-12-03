@@ -1,7 +1,7 @@
   <div class="row">
   <div class="container-fluid">
     <h3 *ngIf="currentPlayer"
-      id="playersTitle">{{ currentPlayer.name }}  {{ currentPlayer.spectator ? "Spectating" : " : " }} {{ currentVote !== 0 ? currentVote : "🧋" }}
+      id="playersTitle">{{ currentPlayer.spectator ? "Spectating..." : currentPlayer.name + " : " }} {{ currentVote !== 0 ? currentVote : "🧋" }}
     </h3>
     <hr *ngIf="!currentPlayer.spectator">
     <div class="row" *ngIf="!currentPlayer.spectator">
