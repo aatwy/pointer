@@ -14,6 +14,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   playerSetSub = new Subscription();
   storySub = new Subscription();
   sessionUpdatedSub = new Subscription();
+
   story: string;
   showVotes: boolean = false;
   admin: boolean = false;
@@ -29,6 +30,28 @@ export class StoryComponent implements OnInit, OnDestroy {
       this.admin = player.isAdmin;
     })
 
+    /*
+      Setup a subscription to listen for players rejoining
+      This will re-broadcast the story to the players so the rejoined
+      player has a copy as well
+
+      This will need to be updated when setting multiple admins
+    */
+    this.dataService.playerRejoined.subscribe((session) => {
+      if (this.admin) {
+        if (this.story) {
+          this.onStoryUpdated();
+        }
+      }
+    })
+    /*
+      Setup a subscription to listen for updates to the session
+      (Usually new player joining)
+      This will re-broadcast the story to the players so the new
+      player has a copy as well
+
+      This will need to be updated when setting multiple admins
+    */
     this.sessionService.sessionUpdated.subscribe((session) => {
       if (this.admin) {
         if (this.story) {
@@ -58,9 +81,6 @@ export class StoryComponent implements OnInit, OnDestroy {
 
   onNextStory(){
     this.votingService.clearVotes()
-    this.showVotes = false;
-    this.votingService.toggleVotes(this.showVotes);
-    this.story = ""
   }
 
   async onStoryUpdated(){

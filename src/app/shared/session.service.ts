@@ -83,12 +83,6 @@ export class SessionService {
     expirationDate.setHours(expirationDate.getHours() + 1);
     // Set cookie
     localStorage.setItem(sessionId, playerId);
-    // this.cookieService.set(sessionId,playerId,expirationDate, 'session' )
-    // this.cookieService.set(
-    //   `${sessionId}`,
-    //   `${playerId}`,
-    //   expirationDate,
-    //   `session`)
     let cookie: Cookie = this.getCookie(sessionId)
     return cookie;
   }
@@ -112,12 +106,14 @@ export class SessionService {
    * Creates a session given the player name, sets the session and player in the object if succesful.
    * @param playerName Name of player to create the session for.
    */
-  async createSession(playerName: string){
-    await this.dataService.createSession({name: playerName, online: true})
+  async createSession(playerName: string, spectate: boolean = false){
+    let newPlayer: Player = { name: playerName, spectator: spectate, online: true }
+    await this.dataService.createSession(newPlayer)
       .then(async (session) => {
       this.sessionId = session._id.toString();
         this.player = session.players[0];
         this.session = session;
+        this.sessionSet.next(this.sessionId)
         // Set the current player to the player that just created the session
         this.createSessionCookie();
         // this.sessionUpdated.next(this.session);
@@ -132,9 +128,15 @@ export class SessionService {
    * Sets the player and sessionId as well
    * @param playerName Name of player to join session with.
    */
-  async joinSession(playerName: string){
-    console.log("In Join Session", this.sessionId)
-    await this.playerService.addPlayer({name: playerName}, this.sessionId)
+  async joinSession(playerName: string, spectate: boolean = false){
+    let newPlayer: Player =
+      {
+        name: playerName,
+        spectator: spectate,
+        isAdmin: false,
+        online: true
+      }
+    await this.playerService.addPlayer(newPlayer, this.sessionId)
       .then(async (player:Player) =>{
         // set player and session
         this.player = player;
@@ -142,6 +144,7 @@ export class SessionService {
         this.createSessionCookie(this.session._id, this.player._id);
         // broadcast the updates
         this.playerSet.next(this.player)
+        this.sessionSet.next(this.sessionId)
     }).catch((error) => {
       // do something with this later
       console.log(`Error during joinSession: ${error}`)
@@ -157,12 +160,14 @@ export class SessionService {
   async rejoinSession(playerId: string, sessionId: string){
     // retrieve session from server, populate sessionService variabels
     // send out update
-    await this.getSession(sessionId).then((session) => {
+    await this.getSession(sessionId).then(async (session) => {
       // set session and player
       this.session = session;
       this.player = session.players.find(player => player._id === playerId);
       // broadcast the updates
       this.playerSet.next(this.player);
+      this.sessionSet.next(this.sessionId);
+      await this.dataService.rejoinedSession(sessionId);
     }).catch((e) => {
       // do something with error later
       console.log(`Error while rejoining session ${e}`);

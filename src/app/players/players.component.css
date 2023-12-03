@@ -1,11 +1,16 @@
 tr:nth-child(odd) {
   background-color: #f2f2f2;
+  color: #fff;
 }
 
 #playersTable {
-  min-width: 100%;
+  width: 100%;
 }
 
 th, td {
-  width: 6em;
+  width: 33%;
+}
+
+#spectatorTh {
+  text-align: left;
 }

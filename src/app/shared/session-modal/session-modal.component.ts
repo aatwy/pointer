@@ -43,9 +43,9 @@ export class SessionModalComponent implements OnInit, AfterViewInit{
     this.createClicked = true;
     if(this.sessionService.joiningSession) {
       // Need to add a check if the session is valid or not, if not then  show error rather than navigate onwards
-      await this.sessionService.joinSession(this.userName)
+      await this.sessionService.joinSession(this.userName, this.spectate)
     } else {
-      await this.sessionService.createSession(this.userName);
+      await this.sessionService.createSession(this.userName, this.spectate);
     }
     this.close();
     this.createClicked = false;
@@ -54,7 +54,7 @@ export class SessionModalComponent implements OnInit, AfterViewInit{
     }
   }
 
-  open(): Promise<boolean> {
+  async open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.modalRef = this.ngmodal.open(this.modalContent)
       this.modalRef.result.then(resolve, resolve)

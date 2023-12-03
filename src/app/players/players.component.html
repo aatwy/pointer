@@ -1,5 +1,7 @@
 <div class="row">
-  <app-player></app-player>
+    <app-player></app-player>
+</div>
+<div class="row">
     <div class="container-fluid">
     <table id="playersTable" class="table table-striped">
       <thead>
@@ -10,12 +12,26 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let player of players">
-          <td>{{ player.name }}</td>
-          <td *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
-          <td *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
-          <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
-        </tr>
+        <ng-container *ngFor="let player of players" >
+          <tr *ngIf="!player.spectator">
+            <td>{{ player.name }}</td>
+            <td *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
+            <td *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
+            <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
+          </tr>
+        </ng-container>
+          <tr>
+            <th id="spectatorTh">Spectators</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <ng-container *ngFor="let player of players">
+            <tr *ngIf="player.spectator">
+              <td>{{ player.name }}</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
       </tbody>
     </table>
     </div>

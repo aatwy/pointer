@@ -16,13 +16,13 @@ export class DataService {
   voteUpdated = this.socket.fromEvent<Session>('voteUpdated');
   toggleShow = this.socket.fromEvent<boolean>('toggleShow');
   storyUpdated = this.socket.fromEvent<string>('storyUpdated');
+  playerRejoined = this.socket.fromEvent<Session>('playerRejoined');
 
   constructor(
     private socket: Socket,
     private notificationService: NotificationService,
     private router: Router) {
     this.connectToSocket();
-
   }
 
   /**
@@ -71,7 +71,7 @@ export class DataService {
         } catch (error){
           this.notificationService.sendMessage({
             type: NotificationType.error,
-            message: "Error: Could get session"
+            message: "Error: Could not get session"
           })
           reject(`Error in getSession: ${error}`)
         }
@@ -90,10 +90,10 @@ export class DataService {
   async addPlayer(playerToCreate: Player, sessionId: string): Promise<Player> {
     return new Promise(async (resolve, reject) => {
       let newPlayer = {
-        name: playerToCreate.name,
+        ...playerToCreate,
         isAdmin: false
       };
-      await this.socket.emit('addPlayer', newPlayer, sessionId, (createdPlayer: any) => {
+      await this.socket.emit('joinSession', newPlayer, sessionId, (createdPlayer: any) => {
         try {
           if ('_id' in createdPlayer) {
             resolve(createdPlayer);
@@ -112,6 +112,23 @@ export class DataService {
     })
   }
 
+  async rejoinedSession(sessionId: string): Promise<Session> {
+    return new Promise(async (resolve, reject) => {
+      await this.socket.emit('rejoinedSession', sessionId, (session:Session) => {
+        try {
+          if ("_id" in session) {
+            resolve(session)
+          }
+        } catch (error) {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error: Could not get session"
+          })
+          reject(`Error in getSession: ${error}`)
+        }
+      })
+    })
+  }
   /**
    * Updates/Adds a vote for a player in a session. An event will be triggered if successful
    * which will update the players array .

@@ -27,6 +27,7 @@ export class PlayerComponent implements OnInit, OnDestroy{
       this.currentVote = updatedPlayer.vote;
     })
     this.currentPlayer = this.sessionService.player;
+    this.currentVote = this.currentPlayer.vote;
 
     this.votesClearedSub = this.votingService.votesCleared.subscribe(() => {
       this.currentVote = null;
@@ -35,8 +36,7 @@ export class PlayerComponent implements OnInit, OnDestroy{
       if(this.currentPlayer) {
         this.currentVote =  players.find(player => player._id === this.currentPlayer._id).vote
       }
-      })
-    this.currentVote = null
+    })
   }
 
   ngOnDestroy(): void {
