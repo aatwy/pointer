@@ -13,10 +13,10 @@ import { DataService } from '../shared/data.service';
 export class StoryComponent implements OnInit, OnDestroy {
   playerSetSub = new Subscription();
   storySub = new Subscription();
-  sessionUpdatedSub = new Subscription();
+  showVotesSub = new Subscription();
 
-  story: string;
-  showVotes: boolean = false;
+  story: string = "";
+  showVotes: boolean;
   admin: boolean = false;
 
   constructor(
@@ -29,44 +29,18 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.playerSetSub = this.sessionService.playerSet.subscribe((player) => {
       this.admin = player.isAdmin;
     })
-
-    /*
-      Setup a subscription to listen for players rejoining
-      This will re-broadcast the story to the players so the rejoined
-      player has a copy as well
-
-      This will need to be updated when setting multiple admins
-    */
-    this.dataService.playerRejoined.subscribe((session) => {
-      if (this.admin) {
-        if (this.story) {
-          this.onStoryUpdated();
-        }
-      }
-    })
-    /*
-      Setup a subscription to listen for updates to the session
-      (Usually new player joining)
-      This will re-broadcast the story to the players so the new
-      player has a copy as well
-
-      This will need to be updated when setting multiple admins
-    */
-    this.sessionService.sessionUpdated.subscribe((session) => {
-      if (this.admin) {
-        if (this.story) {
-          this.onStoryUpdated();
-        }
-      }
-    })
-
     if (this.sessionService.player) {
       this.admin = this.sessionService.player.isAdmin;
     }
-    this.story = ""
+
     this.storySub = this.dataService.storyUpdated.subscribe((story) => {
       this.story = story
     })
+
+    this.showVotesSub = this.dataService.toggleShow.subscribe((showVotes) => {
+      this.showVotes = showVotes;
+    })
+    this.showVotes = this.sessionService.session.showVotes;
   }
 
   ngOnDestroy(): void {

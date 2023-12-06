@@ -25,7 +25,7 @@ export class SessionService {
   session: Session;
   sessionId: string;
   player: Player;
-
+  story: string;
 
   constructor(
     private playerService: PlayerService,
@@ -33,6 +33,7 @@ export class SessionService {
 
     dataService.sessionUpdate.subscribe((session) => {
       this.session = session;
+      this.story = session.story
       this.sessionUpdated.next(this.session);
     })
     // Vote updated recieved from socket, update current votes

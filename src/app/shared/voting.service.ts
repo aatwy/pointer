@@ -19,17 +19,6 @@ export class VotingService {
     private dataService: DataService){
 
       /*
-        Setup subscription to listen fo rejoined players to
-        re-broadcast show/hide value so the rejoined player sees
-        the correct status
-      */
-      this.dataService.playerRejoined.subscribe((session) => {
-        if (this.sessionService.player.isAdmin) {
-          this.toggleVotes(this.showVotes);
-        }
-      })
-
-      /*
         Setup a subscription to listen for vote updates, then recalculate
         votes based on what the new votes are
       */
@@ -48,13 +37,8 @@ export class VotingService {
       /*
         Setup a subscription to listen for player being set(players joining)
         Re-broadcast vote status when triggered
-
-        This will need to be updated when setting multiple admins
       */
       this.sessionService.playerSet.subscribe((player:Player) => {
-        if (this.sessionService.player.isAdmin) {
-          this.toggleVotes(this.showVotes);
-        }
         this.setVotes(this.sessionService.session.players)
       })
       /*
@@ -83,7 +67,7 @@ export class VotingService {
   async toggleVotes(showVotes: boolean){
     this.showVotes = showVotes;
     await this.dataService.toggleVotes(this.sessionService.sessionId, showVotes);
-    this.toggler.next(this.showVotes);
+    // this.toggler.next(this.showVotes);
   }
 
   /**
