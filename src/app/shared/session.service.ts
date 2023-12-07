@@ -33,7 +33,7 @@ export class SessionService {
 
     dataService.sessionUpdate.subscribe((session) => {
       this.session = session;
-      this.story = session.story
+      this.story = session.currentStory
       this.sessionUpdated.next(this.session);
     })
     // Vote updated recieved from socket, update current votes

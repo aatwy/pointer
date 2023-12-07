@@ -1,15 +1,15 @@
 <div class="row">
   <div class="col-sm-12">
-    <h3 id="storyTitle">{{ story ? story : '📔' }}</h3>
+    <h3 class="w-100" id="storyTitle">{{ story ? story : '📔' }}</h3>
     <hr>
     <div class="mt-4"></div>
     <div class="row" *ngIf="admin">
-      <div class="col-md-6 offset-md-3">
+      <div class="col-md-8 offset-md-2">
         <input
           type="text"
           class="input-group mb-3"
           placeholder="enter story..."
-          [(ngModel)]="story"
+          [(ngModel)]="storyInput"
           (ngModelChange)="onStoryUpdated()">
         <button
           id="voteToggle"

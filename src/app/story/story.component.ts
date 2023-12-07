@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { VotingService } from '../shared/voting.service';
@@ -16,6 +16,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   showVotesSub = new Subscription();
 
   story: string = "";
+  storyInput: string = "";
   showVotes: boolean;
   admin: boolean = false;
 
@@ -35,7 +36,11 @@ export class StoryComponent implements OnInit, OnDestroy {
 
     this.storySub = this.dataService.storyUpdated.subscribe((story) => {
       this.story = story
+      if(story === ""){
+        this.storyInput = "";
+      }
     })
+    this.story = this.sessionService.session.currentStory;
 
     this.showVotesSub = this.dataService.toggleShow.subscribe((showVotes) => {
       this.showVotes = showVotes;
@@ -58,6 +63,12 @@ export class StoryComponent implements OnInit, OnDestroy {
   }
 
   async onStoryUpdated(){
-      this.dataService.updateStory(this.sessionService.sessionId, this.story);
+    // Check if user is entering empty spaces to prevent useless network calls
+    if (this.storyInput.replace(/\s/g, '').length) {
+      await this.dataService.updateStory(this.sessionService.sessionId, this.storyInput);
+    } else if (this.story.length > 0){
+      await this.dataService.updateStory(this.sessionService.sessionId, "");
+    }
   }
+
 }

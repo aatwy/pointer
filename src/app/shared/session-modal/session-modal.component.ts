@@ -38,6 +38,11 @@ export class SessionModalComponent implements OnInit, AfterViewInit{
       this.config.keyboard = false;
     }
   }
+  async onEnter(event: KeyboardEvent){
+    if(event.code === "Enter" && this.userName.length > 0){
+      this.onClick();
+    }
+  }
 
   async onClick(){
     this.createClicked = true;

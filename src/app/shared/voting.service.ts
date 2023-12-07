@@ -25,6 +25,7 @@ export class VotingService {
       this.dataService.voteUpdated.subscribe((session) => {
           this.setVotes(session.players);
       })
+      this.setVotes(this.sessionService.session.players)
 
       /*
         Setup a subscription to listen for show/hide votes
@@ -34,6 +35,9 @@ export class VotingService {
         this.showVotes = toggle;
         this.toggler.next(toggle)
       })
+      // Get initial value when loading session
+      this.showVotes = this.sessionService.session.showVotes;
+
       /*
         Setup a subscription to listen for player being set(players joining)
         Re-broadcast vote status when triggered
@@ -41,6 +45,8 @@ export class VotingService {
       this.sessionService.playerSet.subscribe((player:Player) => {
         this.setVotes(this.sessionService.session.players)
       })
+
+
       /*
        Setup a subscription to listen for updates to the session, this will be
        used for updating votes
