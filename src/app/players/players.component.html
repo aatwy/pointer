@@ -14,7 +14,7 @@
       <tbody>
         <ng-container *ngFor="let player of players" >
           <tr *ngIf="!player.spectator">
-            <td>{{ player.name }}</td>
+            <td>{{ player.online ? player.name : player.name + " disconnected" }}</td>
             <td *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
             <td *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
             <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>

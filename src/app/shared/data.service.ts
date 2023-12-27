@@ -112,9 +112,9 @@ export class DataService {
     })
   }
 
-  async rejoinedSession(sessionId: string): Promise<Session> {
+  async rejoinedSession(playerId: string, sessionId: string): Promise<Session> {
     return new Promise(async (resolve, reject) => {
-      await this.socket.emit('rejoinedSession', sessionId, (session:Session) => {
+      await this.socket.emit('rejoinedSession', playerId, sessionId, (session:Session) => {
         try {
           if ("_id" in session) {
             resolve(session)

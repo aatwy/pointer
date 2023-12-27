@@ -168,7 +168,7 @@ export class SessionService {
       // broadcast the updates
       this.playerSet.next(this.player);
       this.sessionSet.next(this.sessionId);
-      await this.dataService.rejoinedSession(sessionId);
+      await this.dataService.rejoinedSession(playerId, sessionId);
     }).catch((e) => {
       // do something with error later
       console.log(`Error while rejoining session ${e}`);

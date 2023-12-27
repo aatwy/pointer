@@ -4,6 +4,10 @@
   border: outset 1px grey;
 }
 
+.pointCard.active {
+  pointer-events: none;
+}
+
 .cardBox {
   display: flex;
   flex: 1 1 100%;
