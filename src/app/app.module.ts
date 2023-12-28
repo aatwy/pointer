@@ -14,11 +14,11 @@ import { PlayersComponent } from './players/players.component';
 import { PlayerComponent } from './players/player/player.component';
 import { HeaderComponent } from './header/header.component';
 import { SessionComponent } from './session/session.component';
-import { HistoryComponent } from './history/history.component';
 import { StoryComponent } from './story/story.component';
 import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
 import { SessionModalComponent } from './shared/session-modal/session-modal.component';
+import { FooterComponent } from './footer/footer.component';
 
 const config: SocketIoConfig = { url: environment.socketURL, options: {}};
 
@@ -29,11 +29,11 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {}};
     PlayerComponent,
     HeaderComponent,
     SessionComponent,
-    HistoryComponent,
     StoryComponent,
     CounterComponent,
     HomeComponent,
     SessionModalComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

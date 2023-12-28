@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit, OnDestroy{
   session: string;
   inSession: boolean = false;
   buttonText: string = "Share Link";
+  spectatorButtonText: string = "Spectate"
   shareTimer: any;
 
   sessionSub = new Subscription();
@@ -45,12 +46,15 @@ export class HeaderComponent implements OnInit, OnDestroy{
     this.session = parsedUrl.toString();
     this.clipboard.copy(this.session);
     if(this.inSession){
-      this.buttonText = "Session Link copied";
+      this.buttonText = "Link Copied!";
       this.shareTimer = setTimeout(() => { this.buttonText = 'Share Session' }, 2000);
     } else {
       this.buttonText = 'Link Copied!';
       this.shareTimer = setInterval(() => { this.buttonText = 'Share Link' }, 2000);
     }
+  }
+
+  onSpectate(){
   }
 
   onGoHome(){

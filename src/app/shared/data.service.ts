@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io'
+import { Router } from '@angular/router';
 
 import { Session } from '../session/session.model';
 import { Player } from '../players/player/player.model';
 import { NotificationService } from './toast/notification.service';
 import { NotificationType } from './toast/notification.message';
-import { Router } from '@angular/router';
+import { Quote } from './models/quote.model';
+
 
 
 @Injectable({
@@ -17,6 +19,7 @@ export class DataService {
   toggleShow = this.socket.fromEvent<boolean>('toggleShow');
   storyUpdated = this.socket.fromEvent<string>('storyUpdated');
   playerRejoined = this.socket.fromEvent<Session>('playerRejoined');
+  quoteUpdated = this.socket.fromEvent<Quote>('quoteUpdated');
 
   constructor(
     private socket: Socket,
@@ -178,6 +181,13 @@ export class DataService {
     await this.socket.emit('leaveRoom', sessionId);
   }
 
+  async getQuote(): Promise<Quote> {
+    return new Promise(async (resolve, reject) => {
+     this.socket.emit('getQuote', "dummy", (quote: Quote) => {
+      resolve(quote);
+      })
+    })
+  }
 }
 
 

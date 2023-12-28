@@ -7,10 +7,21 @@ tr:nth-child(odd) {
   width: 100%;
 }
 
-th, td {
-  width: 33%;
-}
 
 #spectatorTh {
   text-align: left;
+}
+
+.pointCol {
+  text-align: center;
+  width: 20%;
+}
+
+.pointHeader {
+  text-align: center;
+  width: 20%;
+}
+
+.nameHeader {
+  width: 60%;
 }

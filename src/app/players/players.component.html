@@ -6,18 +6,19 @@
     <table id="playersTable" class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">Player</th>
-          <th scope="col">Points</th>
-          <th scope="col">Pointed?</th>
+          <th class="nameHeader" scope="col">Player</th>
+          <th class="pointHeader" scope="col">Points</th>
+          <th class="pointHeader"  scope="col">Pointed</th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let player of players" >
           <tr *ngIf="!player.spectator">
-            <td>{{ player.online ? player.name : player.name + " disconnected" }}</td>
-            <td *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
-            <td *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
-            <td>{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
+            <td *ngIf="!player.online"><i>{{ player.name + " disconnected"}}</i></td>
+            <td *ngIf="player.online">{{ player.name }}</td>
+            <td class="pointCol"  *ngIf="player.vote === 0">{{ showVotes ? '🧋' : "〰️〰️〰️"}}</td>
+            <td class="pointCol"  *ngIf="player.vote != 0">{{ showVotes ? player.vote : "〰️〰️〰️"}}</td>
+            <td class="pointCol">{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
           </tr>
         </ng-container>
       </tbody>

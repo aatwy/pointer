@@ -1,5 +1,5 @@
 <div id="counterArea">
-  <h3 id="averageScore">{{ showVotes ? average : '🤔' }}</h3>
+  <h3 id="averageScore">{{ showVotes ? average : 'Calculating...' }}</h3>
   <hr>
 <table class="table table-striped">
   <thead>
@@ -8,10 +8,10 @@
       <th scope="col"># of Votes</th>
     </tr>
   </thead>
-  <tbody>
+  <tbody *ngIf="showVotes">
     <tr *ngFor="let vote of voteCount">
-      <td><strong>{{ showVotes ? vote.point : '〰️〰️' }}</strong></td>
-      <td>{{ showVotes ? vote.count : '〰️〰️' }}</td>
+      <td>{{vote.point}}</td>
+      <td>{{vote.count}}</td>
     </tr>
   </tbody>
 </table>

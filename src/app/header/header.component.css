@@ -1,6 +1,8 @@
 #shareButton {
-  justify-content: center;
-  align-items: center;
+  margin-left: .2em;
+}
+#spectatorButton {
+  margin-left: .2em;
 }
 
 .vr {
