@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { VotingService } from '../shared/voting.service';
-import { SessionService } from '../shared/session.service';
-import { DataService } from '../shared/data.service';
+import { VotingService } from '../shared/services/voting.service';
+import { SessionService } from '../shared/services/session.service';
+import { DataService } from '../shared/services/data.service';
 
 @Component({
   selector: 'app-story',

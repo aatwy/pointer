@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Subject, Subscription } from "rxjs";
 
-import { Player } from "../players/player/player.model";
+import { Player } from "../../players/player/player.model";
 import { PlayerService } from "./player.service";
 import { DataService } from "./data.service";
-import { Session } from "../session/session.model";
+import { Session } from "../../session/session.model";
 
 export interface Cookie {
   sessionId: string,
@@ -35,6 +35,8 @@ export class SessionService {
       this.session = session;
       this.story = session.currentStory
       this.sessionUpdated.next(this.session);
+      this.player = this.session.players.find(player => player._id === this.player._id);
+      this.playerSet.next(this.player);
     })
     // Vote updated recieved from socket, update current votes
     // in players array
@@ -185,6 +187,13 @@ export class SessionService {
     this.player = null;
     this.joiningSession = null;
     this.sessionSet.next(null);
+  }
+
+  /**
+   * Switches the player to a spectator or not, updates the player in the session.
+   */
+  async switchSpecate(){
+    await this.dataService.switchSpectate(!this.player.spectator, this.player._id, this.sessionId)
   }
 
 

@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Player } from './player/player.model';
-import { VotingService } from '../shared/voting.service';
+import { VotingService } from '../shared/services/voting.service';
 import { Subscription } from 'rxjs';
-import { SessionService } from '../shared/session.service';
+import { SessionService } from '../shared/services/session.service';
 
 
 @Component({
@@ -30,11 +30,11 @@ export class PlayersComponent implements OnInit, OnDestroy {
     }
 
     // Subscribe to changes in the session
-    this.sessionService.player
     this.sessionService.sessionUpdated.subscribe((session) => {
       this.players = session.players;
       this.onSort();
     })
+
     this.players = this.sessionService.session.players;
     // Subscribe to listen for vote updates
     this.votesUpdatedSub = this.votingService.votesChanged.subscribe((players) => {

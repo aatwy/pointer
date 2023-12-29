@@ -4,6 +4,7 @@
       <div class="me-auto"></div>
       <div class="d-flex">
         <button
+          *ngIf="inSession"
           id="spectatorButton"
           class="btn btn-outline-primary"
           (click)="onSpectate()">{{ spectatorButtonText }}</button>

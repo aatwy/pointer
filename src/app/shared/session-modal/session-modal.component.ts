@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 import { ModalConfig } from 'src/app/shared/modal.config.interface';
-import { SessionService } from 'src/app/shared/session.service';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-session-modal',

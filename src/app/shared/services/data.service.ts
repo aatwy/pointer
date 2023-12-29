@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io'
 import { Router } from '@angular/router';
 
-import { Session } from '../session/session.model';
-import { Player } from '../players/player/player.model';
-import { NotificationService } from './toast/notification.service';
-import { NotificationType } from './toast/notification.message';
-import { Quote } from './models/quote.model';
+import { Session } from '../../session/session.model';
+import { Player } from '../../players/player/player.model';
+import { NotificationService } from '../toast/notification.service';
+import { NotificationType } from '../toast/notification.message';
+import { Quote } from '../models/quote.model';
 
 
 
@@ -185,6 +185,24 @@ export class DataService {
     return new Promise(async (resolve, reject) => {
      this.socket.emit('getQuote', "dummy", (quote: Quote) => {
       resolve(quote);
+      })
+    })
+  }
+
+  async switchSpectate(spectate: boolean, playerId: string, sessionId: string): Promise<boolean>{
+    return new Promise(async (resolve, reject) => {
+      await this.socket.emit('switchSpectateMode', spectate, playerId, sessionId, (success: boolean) => {
+        try {
+          if (success) {
+            resolve(success)
+          }
+        } catch (error) {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error in switching spectator mode:"
+          })
+          reject(`Error in switching spectator mode: ${error}`)
+        }
       })
     })
   }

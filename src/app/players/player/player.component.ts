@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Player } from './player.model';
 import { Subscription } from 'rxjs';
-import { VotingService } from 'src/app/shared/voting.service';
-import { SessionService } from 'src/app/shared/session.service';
+import { VotingService } from 'src/app/shared/services/voting.service';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
   selector: 'app-player',

@@ -1,5 +1,5 @@
 import { AfterContentInit, AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Cookie, SessionService } from '../shared/session.service';
+import { Cookie, SessionService } from '../shared/services/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { ModalConfig } from '../shared/modal.config.interface';
 import { SessionModalComponent } from '../shared/session-modal/session-modal.component';

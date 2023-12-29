@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { VotingService } from '../shared/voting.service';
+import { VotingService } from '../shared/services/voting.service';
 import { Subscription } from 'rxjs';
-import { SessionService } from '../shared/session.service';
+import { SessionService } from '../shared/services/session.service';
 
 
 export interface VoteCount {

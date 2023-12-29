@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { DataService } from '../shared/data.service';
+import { DataService } from '../shared/services/data.service';
 import { Quote } from '../shared/models/quote.model';
 
 @Component({

@@ -1,8 +1,8 @@
 #shareButton {
-  margin-left: .2em;
+  margin-left: .1em;
 }
 #spectatorButton {
-  margin-left: .2em;
+  margin-left: .1em;
 }
 
 .vr {
@@ -13,5 +13,6 @@
 .container-fluid{
   display: inline-flex !important;
   flex-direction: row;
+  flex-wrap: nowrap;
 }
 

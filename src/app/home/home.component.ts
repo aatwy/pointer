@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { SessionModalComponent } from '../shared/session-modal/session-modal.component';
 import { ModalConfig } from '../shared/modal.config.interface';
-import { SessionService } from '../shared/session.service';
+import { SessionService } from '../shared/services/session.service';
 
 @Component({
   selector: 'app-home',
