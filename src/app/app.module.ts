@@ -7,6 +7,8 @@ import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { ToastrModule } from 'ngx-toastr';
 import { AppRoutingModule } from './app-routing.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 
 import { environment } from '../environments/environment'
 import { AppComponent } from './app.component';
@@ -44,7 +46,8 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {}};
     ClipboardModule,
     SocketIoModule.forRoot(config),
     ToastrModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
 
   providers: [],

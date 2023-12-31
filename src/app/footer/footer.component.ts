@@ -23,7 +23,6 @@ export class FooterComponent implements OnInit{
         this.author = quote.author;
       }
       this.quoteJson = quote;
-      console.log("quote in sub",quote);
     })
     this.getQuote();
   }

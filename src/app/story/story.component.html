@@ -23,6 +23,14 @@
           class="input-group mb-3 btn btn-outline-primary">
           Next Story
         </button>
+        <label for="adminDropdown">Session Admins</label>
+        <ng-multiselect-dropdown
+          id="adminDropdown"
+          [placeholder]="'Select Admins'"
+          [settings]="dropdownSettings" [data]="dropdownList" [(ngModel)]="selectedItems"
+          (onSelect)="onItemSelect($event)"
+          (onDeSelect)="onDeSelect($event)">
+        </ng-multiselect-dropdown>
       </div>
     </div>
   </div>

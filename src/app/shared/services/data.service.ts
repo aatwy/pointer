@@ -20,6 +20,7 @@ export class DataService {
   storyUpdated = this.socket.fromEvent<string>('storyUpdated');
   playerRejoined = this.socket.fromEvent<Session>('playerRejoined');
   quoteUpdated = this.socket.fromEvent<Quote>('quoteUpdated');
+  adminUpdated = this.socket.fromEvent<Session>('adminUpdated');
 
   constructor(
     private socket: Socket,
@@ -202,6 +203,24 @@ export class DataService {
             message: "Error in switching spectator mode:"
           })
           reject(`Error in switching spectator mode: ${error}`)
+        }
+      })
+    })
+  }
+
+  async setAdmin(isAdmin:boolean, playerId: string, sessionId: string): Promise<boolean>{
+    return new Promise(async (resolve, reject) => {
+      await this.socket.emit('setAdmin', isAdmin, playerId, sessionId, (success: boolean) => {
+        try {
+          if (success) {
+            resolve(success)
+          }
+        } catch (error) {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error in setting admin:"
+          })
+          reject(`Error in setting admin: ${error}`)
         }
       })
     })
