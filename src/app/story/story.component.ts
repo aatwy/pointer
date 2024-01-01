@@ -38,6 +38,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.playerSetSub = this.sessionService.playerSet.subscribe((player) => {
       this.admin = player.isAdmin;
+      this.setAdminList();
     })
     this.admin = this.sessionService.player.isAdmin;
 
@@ -63,17 +64,19 @@ export class StoryComponent implements OnInit, OnDestroy {
       enableCheckAll: false
     };
     this.adminSub = this.dataService.adminUpdated.subscribe((session: Session) => {
-      this.selectedItems = session.players.filter((player) => player.isAdmin).filter((player) => player._id !== this.sessionService.player._id);
-      this.dropdownList = session.players.filter((player) => player._id !== this.sessionService.player._id);
+      this.setAdminList();
     })
-    this.dropdownList = this.sessionService.session.players.filter((player) => player._id !== this.sessionService.player._id);
-    this.selectedItems = this.sessionService.session.players.filter((player) => player.isAdmin).filter((player) => player._id !== this.sessionService.player._id);
+    this.setAdminList();
 
   }
-
   ngOnDestroy(): void {
     this.playerSetSub.unsubscribe();
     this.storySub.unsubscribe();
+  }
+
+  setAdminList(){
+    this.dropdownList = this.sessionService.session.players.filter((player) => player._id !== this.sessionService.player._id);
+    this.selectedItems = this.sessionService.session.players.filter((player) => player.isAdmin).filter((player) => player._id !== this.sessionService.player._id);
   }
 
   toggleVote(){

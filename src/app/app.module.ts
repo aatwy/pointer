@@ -22,6 +22,7 @@ import { HomeComponent } from './home/home.component';
 import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 import { FooterComponent } from './footer/footer.component';
 
+
 const config: SocketIoConfig = { url: environment.socketURL, options: {}};
 
 @NgModule({

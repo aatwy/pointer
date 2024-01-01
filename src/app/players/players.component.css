@@ -15,6 +15,7 @@ tr:nth-child(odd) {
 .pointCol {
   text-align: center;
   width: 20%;
+  color: #33c1c2;
 }
 
 .pointHeader {
