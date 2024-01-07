@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { VotingService } from '../shared/services/voting.service';
@@ -7,6 +7,9 @@ import { DataService } from '../shared/services/data.service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Player } from '../players/player/player.model';
 import { Session } from '../session/session.model';
+import { SessionModalComponent } from '../shared/session-modal/session-modal.component';
+import { ModalConfig } from '../shared/modal.config.interface';
+import { HistoryModalComponent } from './history-modal/history-modal.component';
 
 
 @Component({
@@ -28,6 +31,16 @@ export class StoryComponent implements OnInit, OnDestroy {
   storyInput: string = "";
   showVotes: boolean;
   admin: boolean = false;
+
+  @ViewChild('modal') private modalComponent: HistoryModalComponent
+
+  modalConfig: ModalConfig = {
+    modalTitle: 'History Viewer',
+    closeButtonLabel: 'Close',
+    shouldDismiss: () => true,
+    hideDismissButton: () => false,
+    hideCloseButton: () => true
+  }
 
   constructor(
     private votingService: VotingService,
@@ -97,10 +110,15 @@ export class StoryComponent implements OnInit, OnDestroy {
     }
   }
 
+  async onShowHistory(){
+    return await this.modalComponent.open();
+  }
+
   async onItemSelect(item: any) {
     let player = this.sessionService.session.players.find((player) => player._id === item._id);
     await this.dataService.setAdmin(!player.isAdmin, item._id, this.sessionService.sessionId);
   }
+
   async onDeSelect(item: any) {
     let player = this.sessionService.session.players.find((player) => player._id === item._id);
     await this.dataService.setAdmin(!player.isAdmin, item._id, this.sessionService.sessionId);

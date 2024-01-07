@@ -7,7 +7,12 @@ export class Session {
     public _id?: string,
     public players?: Player[],
     public currentStory?: string,
-    public showVotes?: boolean) {
+    public showVotes?: boolean,
+    public history?:
+      [{
+        story: string,
+        players: Player[]
+      }] ){
 
     }
 }

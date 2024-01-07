@@ -4,3 +4,25 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
+adminDropdown {
+  margin: 1em;
+}
+
+#adminActions {
+  white-space: normal;
+  text-wrap: wrap;
+}
+
+.dropdown-menu {
+  min-width: 100%;
+}
+
+ng-multiselect-dropdown, #historyButton {
+  margin: 2% 2% 5% 5%;
+  max-width: 90%;
+}
+
+#history-modal {
+  width: 100%;
+}

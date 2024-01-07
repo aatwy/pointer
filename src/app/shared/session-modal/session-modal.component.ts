@@ -59,9 +59,9 @@ export class SessionModalComponent implements OnInit, AfterViewInit{
     }
   }
 
-  async open(): Promise<boolean> {
+  async open(options: any = {backdrop: 'static'}): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.modalRef = this.ngmodal.open(this.modalContent)
+      this.modalRef = this.ngmodal.open(this.modalContent, options)
       this.modalRef.result.then(resolve, resolve)
     })
   }

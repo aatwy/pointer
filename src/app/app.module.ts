@@ -21,6 +21,8 @@ import { CounterComponent } from './counter/counter.component';
 import { HomeComponent } from './home/home.component';
 import { SessionModalComponent } from './shared/session-modal/session-modal.component';
 import { FooterComponent } from './footer/footer.component';
+import { HistoryComponent } from './story/history-modal/history/history.component';
+import { HistoryModalComponent } from './story/history-modal/history-modal.component';
 
 
 const config: SocketIoConfig = { url: environment.socketURL, options: {}};
@@ -37,6 +39,8 @@ const config: SocketIoConfig = { url: environment.socketURL, options: {}};
     HomeComponent,
     SessionModalComponent,
     FooterComponent,
+    HistoryComponent,
+    HistoryModalComponent,
   ],
   imports: [
     BrowserModule,

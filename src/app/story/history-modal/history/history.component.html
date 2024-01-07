@@ -1,0 +1,45 @@
+<hr>
+<H3 class="text-center">Story: {{ story }}</H3>
+<h4 class="text-center">Average Vote: {{ average }}</h4>
+<div class="row">
+    <div class="container-fluid">
+      <table id="playersTable" class="table table-striped">
+        <thead>
+          <tr>
+            <th class="nameHeader" scope="col">Player</th>
+            <th class="pointHeader" scope="col">Points</th>
+            <th class="pointHeader" scope="col">Pointed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let player of players">
+            <tr *ngIf="!player.spectator">
+              <td *ngIf="!player.online"><i>{{ player.name + " disconnected"}}</i></td>
+              <td *ngIf="player.online">{{ player.name }}</td>
+              <td class="pointCol" *ngIf="player.vote === 0"> 🧋 </td>
+              <td class="pointCol" *ngIf="player.vote != 0" > {{ player.vote }}</td>
+              <td class="pointCol">{{ player.vote || player.vote === 0 ? "✔️" : ""}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th id="spectatorTh">Spectators</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let player of players">
+            <tr *ngIf="player.spectator">
+              <td>{{ player.name }}</td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+  </div>
+</div>

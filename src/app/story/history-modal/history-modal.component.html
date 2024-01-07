@@ -1,0 +1,43 @@
+<ng-template #modal id="history-modal">
+  <div class="modal-header" data-bs-theme="dark">
+    <h5 class="modal-title" id="modalTitle">{{ modalConfig.modalTitle }}</h5>
+    <button (click)="dismiss()"
+      *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
+      [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()"
+      type="button" class="btn-close" aria-label="Close">
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="flex-row">
+      <div ngbDropdown>
+        <button
+          [disabled]="historyEntries.length === 0"
+          type="button"
+          class="btn btn-outline-primary"
+          id="adminActions"
+          ngbDropdownToggle>
+          {{ buttonText ? buttonText : "No story name entered"}}
+        </button>
+        <div
+          ngbDropdownMenu
+          aria-labelledby="adminActions"
+          class="dropdown-menu">
+            <button
+              *ngFor="let historyEntry of historyEntries; index as i"
+              ngbDropdownItem
+              type="button"
+              id=i
+              class="input-group"
+              (click)="onSelectEntry(historyEntry)">
+              {{ historyEntry.story ? historyEntry.story : "No story name entered"}}
+            </button>
+        </div>
+      </div>
+    </div>
+    <div  *ngIf="selectedEntry != null" id="storyDisplay">
+      <app-history [historyEntry]="selectedEntry"></app-history>
+    </div>
+  </div>
+  <div class="modal-footer">
+  </div>
+</ng-template>
