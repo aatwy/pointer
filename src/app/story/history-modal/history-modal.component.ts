@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injectable, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injectable, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { SessionService } from 'src/app/shared/services/session.service';
 })
 
 @Injectable()
-export class HistoryModalComponent implements OnInit {
+export class HistoryModalComponent implements OnInit, OnDestroy {
   @Input() public modalConfig: ModalConfig;
   @ViewChild('modal') private modalContent: TemplateRef<HistoryModalComponent>;
   private modalRef: NgbModalRef;
@@ -26,8 +26,7 @@ export class HistoryModalComponent implements OnInit {
 
   constructor(
     private sessionService: SessionService,
-    private ngmodal: NgbModal,
-    private config: NgbModalConfig) {
+    private ngmodal: NgbModal) {
   }
 
   ngOnInit(): void {
@@ -38,12 +37,20 @@ export class HistoryModalComponent implements OnInit {
 
   }
 
+  ngOnDestroy(): void {
+    this.sessionSub.unsubscribe();
+  }
 
   async open(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.modalRef = this.ngmodal.open(this.modalContent, {size: 'md'})
+      this.modalRef = this.ngmodal.open(this.modalContent, { size: 'md', beforeDismiss: () => this.clearHistory()})
       this.modalRef.result.then(resolve, resolve)
     })
+  }
+
+  async clearHistory(): Promise<boolean> {
+    this.selectedEntry = null;
+    return Promise.resolve(true)
   }
 
   async close(): Promise<void> {
@@ -51,6 +58,7 @@ export class HistoryModalComponent implements OnInit {
       const result = this.modalConfig.onClose === undefined || (await this.modalConfig.onClose())
       this.modalRef.close(result)
     }
+    this.selectedEntry = null
   }
 
   async dismiss(): Promise<void> {
@@ -58,6 +66,7 @@ export class HistoryModalComponent implements OnInit {
       const result = this.modalConfig.onDismiss === undefined || (await this.modalConfig.onDismiss())
       this.modalRef.dismiss(result)
     }
+    this.selectedEntry = null
   }
 
   onSelectEntry(entry: sessionHistory) {

@@ -19,6 +19,7 @@
         </button>
         <button
           id="clear"
+          [disabled]="story === ''"
           (click)="onNextStory()"
           class="input-group mb-3 btn btn-outline-primary">
           Next Story

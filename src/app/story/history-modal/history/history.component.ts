@@ -13,16 +13,14 @@ export class HistoryComponent implements OnInit, OnChanges{
   players: Player[] = [];
   average: number = 0;
 
-  constructor( ) { }
-
   ngOnInit(): void {
     if (this.historyEntry){
       this.story = this.historyEntry.story;
       this.players = this.historyEntry.players;
       this.average = Math.round(this.historyEntry.average * 10) / 10
     }
-
   }
+
 
   ngOnChanges(): void {
     if (this.historyEntry) {
