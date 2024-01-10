@@ -30,6 +30,10 @@ export class SessionService {
   constructor(
     private playerService: PlayerService,
     private dataService: DataService){
+    // check if user has been set to offline (usually due to connection issues)
+    setInterval(() => {
+      this.playerOnlineCheck();
+    }, 10000)
 
     dataService.sessionUpdate.subscribe((session) => {
       this.session = session;
@@ -44,6 +48,13 @@ export class SessionService {
       this.session.players = session.players;
       this.voteUdpated.next(session.players);
     })
+  }
+
+  async playerOnlineCheck(){
+    let player = this.session.players.find(player => player._id === this.player._id)
+    if(player && !player.online){
+      await this.rejoinSession(this.player._id, this.session._id)
+    }
   }
 
   /**
