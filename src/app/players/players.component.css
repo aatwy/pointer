@@ -25,3 +25,7 @@ tr:nth-child(odd) {
 .nameHeader {
   width: 60%;
 }
+
+#spectatorTable {
+  margin-bottom: 15%;
+}

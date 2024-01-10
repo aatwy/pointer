@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io'
 import { Router } from '@angular/router';
 
-import { Session } from '../../session/session.model';
+import { Session } from '../models/session.model';
 import { Player } from '../../players/player/player.model';
 import { NotificationService } from '../toast/notification.service';
 import { NotificationType } from '../toast/notification.message';
@@ -21,6 +21,7 @@ export class DataService {
   playerRejoined = this.socket.fromEvent<Session>('playerRejoined');
   quoteUpdated = this.socket.fromEvent<Quote>('quoteUpdated');
   adminUpdated = this.socket.fromEvent<Session>('adminUpdated');
+  voteLockUpdated = this.socket.fromEvent<boolean>('voteLockUpdated');
 
   constructor(
     private socket: Socket,
@@ -182,6 +183,10 @@ export class DataService {
     await this.socket.emit('leaveRoom', sessionId);
   }
 
+  /**
+   * Gets current quote from the server
+   * @returns
+   */
   async getQuote(): Promise<Quote> {
     return new Promise(async (resolve, reject) => {
      this.socket.emit('getQuote', "dummy", (quote: Quote) => {
@@ -190,6 +195,13 @@ export class DataService {
     })
   }
 
+  /**
+   * Switches player from and to spectator mode in a session
+   * @param spectate
+   * @param playerId
+   * @param sessionId
+   * @returns
+   */
   async switchSpectate(spectate: boolean, playerId: string, sessionId: string): Promise<boolean>{
     return new Promise(async (resolve, reject) => {
       await this.socket.emit('switchSpectateMode', spectate, playerId, sessionId, (success: boolean) => {
@@ -208,6 +220,13 @@ export class DataService {
     })
   }
 
+  /**
+   * Sets player as admin, or removes admin from player
+   * @param isAdmin
+   * @param playerId
+   * @param sessionId
+   * @returns
+   */
   async setAdmin(isAdmin:boolean, playerId: string, sessionId: string): Promise<boolean>{
     return new Promise(async (resolve, reject) => {
       await this.socket.emit('setAdmin', isAdmin, playerId, sessionId, (success: boolean) => {
@@ -225,6 +244,25 @@ export class DataService {
       })
     })
   }
+
+  async lockVotes(lockVotes: boolean, sessionId: string): Promise<boolean>{
+    return new Promise(async (resolve, reject) => {
+      await this.socket.emit('toggleLock', lockVotes, sessionId, (success: boolean) => {
+        try {
+          if (success) {
+            resolve(success)
+          }
+        } catch (error) {
+          this.notificationService.sendMessage({
+            type: NotificationType.error,
+            message: "Error in locking controls:"
+          })
+          reject(`Error in locking controls: ${error}`)
+        }
+      })
+    })
+  }
+
 }
 
 

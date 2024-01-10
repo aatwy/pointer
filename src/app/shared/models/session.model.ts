@@ -1,4 +1,4 @@
-import { Player } from "../players/player/player.model";
+import { Player } from "../../players/player/player.model";
 
 export class Session {
 
@@ -8,6 +8,7 @@ export class Session {
     public players?: Player[],
     public currentStory?: string,
     public showVotes?: boolean,
+    public lockVotes?: boolean,
     public history?:
       [{
         story: string,

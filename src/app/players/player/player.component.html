@@ -7,6 +7,7 @@
     <div class="row" *ngIf="!currentPlayer.spectator">
       <div class="col-10 cardBox mt-1">
         <button
+          [disabled]="lockControls && !isClicked(vote)"
           *ngFor="let vote of voteControl"
           id={{vote}}
           (click)="onVote($event)"

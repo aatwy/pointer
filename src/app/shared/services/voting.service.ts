@@ -8,8 +8,10 @@ import { DataService } from "./data.service";
 @Injectable({providedIn: 'root'})
 export class VotingService {
   showVotes: boolean = false;
+  lockVotes: boolean = false;
   votes: number[] = [];
 
+  voteLockUpdated = new Subject<boolean>();
   votesChanged = new Subject<Player[]>();
   votesCleared = new Subject<boolean>();
   toggler = new Subject<boolean>();
@@ -17,6 +19,16 @@ export class VotingService {
   constructor(
     private sessionService: SessionService,
     private dataService: DataService){
+
+      /*
+        Setup a subscription to listen for vote lock updates,
+        Then update the current lock status and blast it out to all subscribers
+      */
+      this.dataService.voteLockUpdated.subscribe((lock) => {
+        this.lockVotes = lock;
+        this.voteLockUpdated.next(lock);
+      })
+      this.lockVotes = this.sessionService.session.lockVotes;
 
       /*
         Setup a subscription to listen for vote updates, then recalculate
@@ -72,10 +84,20 @@ export class VotingService {
    */
   async toggleVotes(showVotes: boolean){
     this.showVotes = showVotes;
+    // Lock votes automatically on reveal, and unlock on hide
+    if(showVotes === true) {
+      await this.toggleLock(true, this.sessionService.sessionId)
+    } else {
+      await this.toggleLock(false, this.sessionService.sessionId)
+    }
     await this.dataService.toggleVotes(this.sessionService.sessionId, showVotes);
     // this.toggler.next(this.showVotes);
   }
 
+  async toggleLock(lockVotes: boolean, sessionId: string){
+    this.lockVotes = lockVotes;
+    await this.dataService.lockVotes(lockVotes, sessionId);
+  }
   /**
    * Clears votes for all of the players in the session
    */

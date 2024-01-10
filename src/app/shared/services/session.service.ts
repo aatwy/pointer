@@ -4,7 +4,7 @@ import { Subject, Subscription } from "rxjs";
 import { Player } from "../../players/player/player.model";
 import { PlayerService } from "./player.service";
 import { DataService } from "./data.service";
-import { Session } from "../../session/session.model";
+import { Session } from "../models/session.model";
 
 export interface Cookie {
   sessionId: string,

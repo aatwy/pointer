@@ -6,11 +6,9 @@ import { SessionService } from '../shared/services/session.service';
 import { DataService } from '../shared/services/data.service';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { Player } from '../players/player/player.model';
-import { Session } from '../session/session.model';
-import { SessionModalComponent } from '../shared/session-modal/session-modal.component';
+import { Session } from '../shared/models/session.model';
 import { ModalConfig } from '../shared/modal.config.interface';
 import { HistoryModalComponent } from './history-modal/history-modal.component';
-
 
 @Component({
   selector: 'app-story',
@@ -22,6 +20,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   storySub = new Subscription();
   showVotesSub = new Subscription();
   adminSub = new Subscription();
+  lockVoteSub = new Subscription();
 
   dropdownList: Player[] = [];
   selectedItems: Player[] = [];
@@ -30,6 +29,7 @@ export class StoryComponent implements OnInit, OnDestroy {
   story: string = "";
   storyInput: string = "";
   showVotes: boolean;
+  lockVotes: boolean;
   admin: boolean = false;
 
   @ViewChild('modal') private modalComponent: HistoryModalComponent
@@ -69,6 +69,11 @@ export class StoryComponent implements OnInit, OnDestroy {
     })
     this.showVotes = this.sessionService.session.showVotes;
 
+    this.lockVoteSub = this.votingService.voteLockUpdated.subscribe((lock) => {
+      this.lockVotes = lock;
+    });
+    this.lockVotes = this.votingService.lockVotes;
+
     this.dropdownSettings = {
       singleSelection: false,
       idField: '_id',
@@ -82,9 +87,13 @@ export class StoryComponent implements OnInit, OnDestroy {
     this.setAdminList();
 
   }
+
   ngOnDestroy(): void {
     this.playerSetSub.unsubscribe();
     this.storySub.unsubscribe();
+    this.showVotesSub.unsubscribe();
+    this.lockVoteSub.unsubscribe();
+    this.adminSub.unsubscribe();
   }
 
   setAdminList(){
@@ -95,6 +104,11 @@ export class StoryComponent implements OnInit, OnDestroy {
   toggleVote(){
     this.showVotes = !this.showVotes
     this.votingService.toggleVotes(this.showVotes);
+  }
+
+  async toggleLock(){
+    this.lockVotes = !this.lockVotes;
+    await this.votingService.toggleLock(this.lockVotes, this.sessionService.sessionId);
   }
 
   onNextStory(){
@@ -123,4 +137,5 @@ export class StoryComponent implements OnInit, OnDestroy {
     let player = this.sessionService.session.players.find((player) => player._id === item._id);
     await this.dataService.setAdmin(!player.isAdmin, item._id, this.sessionService.sessionId);
   }
+
 }

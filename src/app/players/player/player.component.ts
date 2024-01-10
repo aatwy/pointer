@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Player } from './player.model';
 import { Subscription } from 'rxjs';
 import { VotingService } from 'src/app/shared/services/voting.service';
@@ -9,12 +9,15 @@ import { SessionService } from 'src/app/shared/services/session.service';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.css']
 })
-export class PlayerComponent implements OnInit, OnDestroy{
+export class PlayerComponent implements OnInit, OnDestroy, OnChanges{
   voteControl: number[] = [.5,1,2,3,5,8,13,20,40,100,0]
   currentVote: number;
   currentPlayer:Player;
+  lockControls: boolean = false;
+
   votesClearedSub = new Subscription();
   votesUpdatedSub = new Subscription();
+  votesLockSub = new Subscription();
 
   constructor(
     private votingService: VotingService,
@@ -22,6 +25,11 @@ export class PlayerComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    this.votesLockSub = this.votingService.voteLockUpdated.subscribe((lock) => {
+      this.lockControls = lock;
+    })
+    this.lockControls = this.votingService.lockVotes;
+
     this.sessionService.playerSet.subscribe((updatedPlayer)=>{
       this.currentPlayer = updatedPlayer;
       this.currentVote = updatedPlayer.vote;
@@ -39,9 +47,14 @@ export class PlayerComponent implements OnInit, OnDestroy{
     })
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+
+  }
+
   ngOnDestroy(): void {
     this.votesClearedSub.unsubscribe();
     this.votesUpdatedSub.unsubscribe();
+    this.votesLockSub.unsubscribe();
   }
 
   isClicked(vote: number){

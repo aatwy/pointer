@@ -18,6 +18,12 @@
           {{ showVotes ? "Hide" : "Show"}}
         </button>
         <button
+          id="lockToggle"
+          (click)="toggleLock()"
+          class="input-group mb-3 btn btn-outline-primary">
+          {{ lockVotes ? "Unlock Votes" : "Lock Votes"}}
+        </button>
+        <button
           id="clear"
           [disabled]="story === ''"
           (click)="onNextStory()"
