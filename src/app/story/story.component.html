@@ -19,6 +19,7 @@
         </button>
         <button
           id="lockToggle"
+          [disabled]="!showVotes"
           (click)="toggleLock()"
           class="input-group mb-3 btn btn-outline-primary">
           {{ lockVotes ? "Unlock Votes" : "Lock Votes"}}
