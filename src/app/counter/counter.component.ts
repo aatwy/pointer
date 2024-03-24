@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VotingService } from '../shared/services/voting.service';
 import { Subscription } from 'rxjs';
 import { SessionService } from '../shared/services/session.service';
+import { Player } from '../players/player/player.model';
 
 
 export interface VoteCount {
@@ -13,7 +14,6 @@ export interface VoteCount {
   templateUrl: './counter.component.html',
   styleUrls: ['./counter.component.css']
 })
-
 export class CounterComponent implements OnInit, OnDestroy{
   voterSub: Subscription;
   voteTogglerSub: Subscription;
@@ -23,6 +23,7 @@ export class CounterComponent implements OnInit, OnDestroy{
   voteCount: VoteCount[] = [];
   average: string;
   showVotes: boolean = false;
+  counterMessage: string = "Calculating..."
 
   constructor(private voteService: VotingService,
     private sessionService: SessionService){}
@@ -76,7 +77,12 @@ export class CounterComponent implements OnInit, OnDestroy{
     }
     this.voteCount = this.voteCount.sort((a,b) => b.count - a.count )
     this.average = "Average: " + Math.round((this.averageVotes()) * 100) / 100
+    this.checkIfAllVoted(this.sessionService.session.players)
   }
 
+  checkIfAllVoted(players: Player[]) {
+    let allVoted : boolean = players.every(player => player.vote != null)
+    this.counterMessage = allVoted ? "Ready To Show!" : "Calculating..."
+  }
 
 }
