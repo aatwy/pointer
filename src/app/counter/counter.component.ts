@@ -81,8 +81,11 @@ export class CounterComponent implements OnInit, OnDestroy{
   }
 
   checkIfAllVoted(players: Player[]) {
-    let allVoted : boolean = players.every(player => player.vote != null)
-    this.counterMessage = allVoted ? "Ready To Show!" : "Calculating..."
+    // Select all players that are not spectators
+    let votingPlayers = players.filter((player) => player.spectator == false)
+    // Make sure all non-spectator players have point4ed
+    let allVoted: boolean = votingPlayers.every(player => player.vote != null)
+    this.counterMessage = allVoted ? "Flip em!" : "Calculating..."
   }
 
 }
