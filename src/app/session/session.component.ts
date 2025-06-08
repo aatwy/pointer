@@ -7,7 +7,8 @@ import { SessionModalComponent } from '../shared/session-modal/session-modal.com
 @Component({
   selector: 'app-session',
   templateUrl: './session.component.html',
-  styleUrls: ['./session.component.css']
+  styleUrls: ['./session.component.css'],
+  standalone: false
 })
 export class SessionComponent implements OnInit, AfterViewInit {
   @ViewChild('modal') private modalComponent: SessionModalComponent

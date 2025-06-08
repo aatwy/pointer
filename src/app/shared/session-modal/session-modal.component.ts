@@ -8,7 +8,8 @@ import { SessionService } from 'src/app/shared/services/session.service';
 @Component({
   selector: 'app-session-modal',
   templateUrl: './session-modal.component.html',
-  styleUrls: ['./session-modal.component.css']
+  styleUrls: ['./session-modal.component.css'],
+  standalone: false
 })
 @Injectable()
 export class SessionModalComponent implements OnInit, AfterViewInit{

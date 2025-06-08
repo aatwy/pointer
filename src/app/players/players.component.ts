@@ -8,7 +8,8 @@ import { SessionService } from '../shared/services/session.service';
 @Component({
   selector: 'app-players',
   templateUrl: './players.component.html',
-  styleUrls: ['./players.component.css']
+  styleUrls: ['./players.component.css'],
+  standalone: false
 })
 
 export class PlayersComponent implements OnInit, OnDestroy {

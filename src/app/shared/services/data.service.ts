@@ -117,6 +117,33 @@ export class DataService {
     })
   }
 
+  /**
+   * Updates player, currently only name is updated! An event will be triggered if successful which will
+   * update the players array
+   *
+   * @param playertoUpdate Player to update
+   * @param sessionId _id of the session to update player in
+   * @returns Player wrapped in a promise
+   */
+  async updatePlayer(playerToUpdate: Player, sessionId: string): Promise<Player> {
+    return new Promise(async (resolve, reject) => {
+      await this.socket.emit('updatePlayer', playerToUpdate, sessionId, (updatedPlayer: Player) => {
+        try {
+          if (updatedPlayer.name == playerToUpdate.name) {
+            resolve(this.updatePlayer)
+          }
+          } catch(error) {
+            this.notificationService.sendMessage({
+              type: NotificationType.error,
+              message: "Error updating Player"
+            })
+            reject(`Error in updatePlayer: ${error}`)
+          }
+      })
+    })
+
+  }
+
   async rejoinedSession(playerId: string, sessionId: string): Promise<Session> {
     return new Promise(async (resolve, reject) => {
       await this.socket.emit('rejoinedSession', playerId, sessionId, (session:Session) => {

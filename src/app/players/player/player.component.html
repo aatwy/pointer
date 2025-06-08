@@ -1,19 +1,35 @@
-  <div class="row">
-  <div class="container-fluid">
-    <h3
-      id="playersTitle">{{ currentPlayer.spectator ? "Spectating..." : currentPlayer.name + " : " }} {{ !currentPlayer.spectator && currentVote !== 0 ? currentVote : "🧋" }}
-    </h3>
+<div class="row">
+  <div class="container-fluid" style="text-align:center;">
+    <div class="container-fluid" #playerNameDisplay>
+
+      @if(edit){
+        <input
+          [(ngModel)]="currentPlayer.name"
+          #playerNameTextBox
+          type="text"
+          (keyup)="onEditName($event)"
+          >
+      } @else {
+        <h3
+          (mouseup)="onEnableEdit()"
+          id="playersTitle">
+          {{ currentPlayer.name }}
+        </h3>
+      }
+      <h3>
+        {{ " : " + (currentPlayer.spectator ? "Spectating..." : "" )}}
+      </h3>
+      <h3>
+        {{ !currentPlayer.spectator && currentVote !== 0 ? currentVote : "🧋" }}
+      </h3>
+    </div>
     <hr *ngIf="!currentPlayer.spectator">
     <div class="row" *ngIf="!currentPlayer.spectator">
       <div class="col-10 cardBox mt-1">
-        <button
-          [disabled]="lockControls && !isClicked(vote)"
-          *ngFor="let vote of voteControl"
-          id={{vote}}
-          (click)="onVote($event)"
-          [ngClass]="{active : isClicked(vote)}"
-          class="btn btn-light pointCard">
-          {{ vote !== 0 ?  vote : "🧋" }}
+        <button [disabled]="lockControls && !isClicked(vote)"
+          *ngFor="let vote of voteControl" id={{vote}} (click)="onVote($event)"
+          [ngClass]="{active : isClicked(vote)}" class="btn btn-light pointCard">
+          {{ vote !== 0 ? vote : "🧋" }}
         </button>
       </div>
     </div>

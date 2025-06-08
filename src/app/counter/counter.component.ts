@@ -12,7 +12,8 @@ export interface VoteCount {
 @Component({
   selector: 'app-counter',
   templateUrl: './counter.component.html',
-  styleUrls: ['./counter.component.css']
+  styleUrls: ['./counter.component.css'],
+  standalone: false
 })
 export class CounterComponent implements OnInit, OnDestroy{
   voterSub: Subscription;

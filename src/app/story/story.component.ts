@@ -13,7 +13,8 @@ import { HistoryModalComponent } from './history-modal/history-modal.component';
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
-  styleUrls: ['./story.component.css']
+  styleUrls: ['./story.component.css'],
+  standalone: false
 })
 export class StoryComponent implements OnInit, OnDestroy {
   playerSetSub = new Subscription();

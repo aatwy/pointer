@@ -5,7 +5,8 @@ import { sessionHistory } from 'src/app/shared/models/sessionHistory.model';
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
-  styleUrls: ['./history.component.scss']
+  styleUrls: ['./history.component.scss'],
+  standalone: false
 })
 export class HistoryComponent implements OnInit, OnChanges{
   @Input() historyEntry: sessionHistory

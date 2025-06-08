@@ -18,4 +18,14 @@
 
 #playersTitle {
   text-align: center;
+  display: inline;
 }
+
+h3 {
+  display: inline;
+}
+
+#playerNameTextBox {
+  display: inline;
+}
+

@@ -27,4 +27,21 @@ export class PlayerService {
         })
     })
   }
+
+  /**
+   *
+   * @param player
+   * @param sessionId
+   */
+  async updatePlayer(player: Player, sessionId: string): Promise<Player> {
+    // Send updated player
+    return new Promise(async (resolve, reject) => {
+      await this.dataService.updatePlayer(player, sessionId).then((updatedPlayer: Player) => {
+        resolve(updatedPlayer);
+      }).catch((error: Error) => {
+        console.log(error)
+        reject(error)
+      })
+    })
+  }
 }

@@ -9,7 +9,8 @@ import { SessionService } from 'src/app/shared/services/session.service';
 @Component({
   selector: 'app-history-modal',
   templateUrl: './history-modal.component.html',
-  styleUrls: ['./history-modal.component.scss']
+  styleUrls: ['./history-modal.component.scss'],
+  standalone: false
 })
 
 @Injectable()
